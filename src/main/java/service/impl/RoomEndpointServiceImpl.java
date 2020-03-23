@@ -10,7 +10,8 @@ import java.util.*;
 public class RoomEndpointServiceImpl implements RoomEndpointService {
     @Override
     public Set<Session> getRoomSessions(String roomId) {
-        return ServerEndpoint.activeRooms.get(roomId);
+        return null;
+//        return ServerEndpoint.activeRooms.get(roomId);
     }
 
     @Override

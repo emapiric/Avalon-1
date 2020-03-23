@@ -2,6 +2,7 @@ package domain;
 
 public class Player {
 
+    private String command;
     private String username;
     private String playerId;
     private String roomId;
@@ -10,6 +11,14 @@ public class Player {
         this.username = username;
         this.playerId = playerId;
         this.roomId = roomId;
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    public void setCommand(String command) {
+        this.command = command;
     }
 
     public String getUsername() {

@@ -1,57 +1,107 @@
 package service.impl;
 
 import domain.Player;
+import domain.Room;
 import service.ServerEndpointService;
 
 import javax.websocket.Session;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class ServerEndpointServiceImpl implements ServerEndpointService {
 
-    //dorati slucaj kad dodeli isti id dvojici playera ili room
+    //Slucaj kad dodeli dvojici playera isti ID - treba dodati
     @Override
-    public String allocate(Player player, Map<String, Set<Session>> activeRooms, Session session) {
+    public Player newPlayer(Player player, Set<Room> rooms, Session session) {
+        player.setPlayerId(createId(4));
+        String roomId = createId(4);
+        boolean roomIdIsOK = false;
 
-        if(player == null) {
-            return "Error sending player";
-        }
-        if(player.getUsername() == null) {
-            return "Wrong username";
-        }
-
-        //new player
-        if(player.getPlayerId() == null && player.getRoomId() == null){
-            newPlayer(player,activeRooms,session);
-        }
-
-        if(player.getPlayerId() == null && player.getRoomId() != null){
-            boolean roomExists = false;
-            for (String s: activeRooms.keySet()
-                 ) {
-                if(s.equals(player.getRoomId()))
-                    roomExists = true;
+        while(!roomIdIsOK) {
+            if (!checkRoom(roomId, rooms)) {
+                roomIdIsOK = true;
             }
-
-            if(!roomExists)
-                newPlayer(player,activeRooms,session);
-            else
-                player.setPlayerId(createId(4));
-
         }
+        player.setRoomId(roomId);
 
-        return "OK";
+        rooms.add(new Room(player.getRoomId()));
+        addPlayer(player,rooms,session);
+        return  player;
     }
 
     @Override
-    public void newPlayer(Player player, Map<String, Set<Session>> activeRooms, Session session) {
-        player.setPlayerId(createId(4));
-        player.setRoomId(createId(4));
-        Set<Session> newRoom = Collections.synchronizedSet(new HashSet<Session>());
-        newRoom.add(session);
-        activeRooms.put(player.getRoomId(), newRoom);
+    public Player enterRoom(Player player, Set<Room> rooms, Session session) {
+        if(!checkRoom(player.getRoomId(),rooms)){
+            player.setRoomId("Room does not exist");
+        }
+        if(isFullRoom(player.getRoomId(),rooms)){
+            player.setRoomId("Room is full");
+        }
+        else {
+            addPlayer(player,rooms,session);
+        }
+
+        return player;
+
+    }
+
+    @Override
+    public Player reconnect(Player player, Set<Room> rooms, Session session) {
+        if(!canReconnect(player.getRoomId(),player.getPlayerId(),rooms)){
+            player.setRoomId("Failed to reconnect");
+        }
+        else{
+            addPlayer(player,rooms,session);
+        }
+
+        return player;
+    }
+
+    @Override
+    public boolean isFullRoom(String roomId, Set<Room> rooms) {
+        return findRoom(roomId,rooms).getPlayers().size() >= 5;
+    }
+
+    @Override
+    public boolean checkRoom(String roomId, Set<Room> rooms) {
+        return findRoom(roomId,rooms) != null;
+    }
+
+    @Override
+    public boolean isActiveRoom(String roomId, Set<Room> rooms) {
+        return findRoom(roomId,rooms).isActive();
+    }
+
+    @Override
+    public boolean canReconnect(String roomId, String playerId, Set<Room> rooms) {
+        Room room = findRoom(roomId,rooms);
+        for (String player: room.getOutOfGame()
+             ) {
+            if(playerId.equals(player))
+                return true;
+        }
+        return  false;
+    }
+
+    @Override
+    public Room findRoom(String roomId, Set<Room> rooms) {
+        for (Iterator<Room> it = rooms.iterator(); it.hasNext(); ) {
+            Room r = it.next();
+
+            if (r.getRoomId().equals(roomId)){
+                return r;
+            }
+
+        }
+        return null;
+    }
+
+    @Override
+    public void addPlayer(Player player, Set<Room> rooms, Session session) {
+        Room room = findRoom(player.getRoomId(),rooms);
+        room.addPlayer(session);
+        session.getUserProperties().put("username",player.getUsername());
+        session.getUserProperties().put("playerId",player.getPlayerId());
+        session.getUserProperties().put("roomId",player.getRoomId());
     }
 
     private static String createId(int n) {
