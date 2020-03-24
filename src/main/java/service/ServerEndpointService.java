@@ -32,4 +32,6 @@ public interface ServerEndpointService {
 
     public void addPlayer(Player player, Set<Room> rooms, Session session);
 
+    public Player updateUsername(Player player, Set<Room> rooms, Session session);
+
 }

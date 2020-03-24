@@ -1,4 +1,4 @@
-package domain;
+package domain.decoder;
 
 import com.google.gson.Gson;
 

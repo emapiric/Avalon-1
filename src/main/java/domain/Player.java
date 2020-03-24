@@ -7,7 +7,17 @@ public class Player {
     private String playerId;
     private String roomId;
 
+    public Player() {
+    }
+
     public Player(String username, String playerId, String roomId) {
+        this.username = username;
+        this.playerId = playerId;
+        this.roomId = roomId;
+    }
+
+    public Player(String command, String username, String playerId, String roomId) {
+        this.command = command;
         this.username = username;
         this.playerId = playerId;
         this.roomId = roomId;

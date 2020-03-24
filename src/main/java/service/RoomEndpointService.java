@@ -10,4 +10,6 @@ public interface RoomEndpointService {
 
     public void sendToRoom(String message, Session session, String roomId) throws IOException;
 
+
+
 }

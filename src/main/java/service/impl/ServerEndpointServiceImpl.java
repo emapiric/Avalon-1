@@ -32,9 +32,11 @@ public class ServerEndpointServiceImpl implements ServerEndpointService {
     public Player enterRoom(Player player, Set<Room> rooms, Session session) {
         if(!checkRoom(player.getRoomId(),rooms)){
             player.setRoomId("Room does not exist");
+            return player;
         }
         if(isFullRoom(player.getRoomId(),rooms)){
             player.setRoomId("Room is full");
+            return player;
         }
         else {
             addPlayer(player,rooms,session);
@@ -63,6 +65,7 @@ public class ServerEndpointServiceImpl implements ServerEndpointService {
 
     @Override
     public boolean checkRoom(String roomId, Set<Room> rooms) {
+        if(rooms == null) return false;
         return findRoom(roomId,rooms) != null;
     }
 
@@ -102,6 +105,17 @@ public class ServerEndpointServiceImpl implements ServerEndpointService {
         session.getUserProperties().put("username",player.getUsername());
         session.getUserProperties().put("playerId",player.getPlayerId());
         session.getUserProperties().put("roomId",player.getRoomId());
+    }
+
+    @Override
+    public Player updateUsername(Player player, Set<Room> rooms, Session session) {
+        Room room = findRoom(player.getRoomId(),rooms);
+        for (Session s: room.getPlayers()
+             ) {
+            if(s.getId().equals(session.getId()))
+                s.getUserProperties().put("username",player.getUsername());
+        }
+        return player;
     }
 
     private static String createId(int n) {

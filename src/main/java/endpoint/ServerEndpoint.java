@@ -1,19 +1,14 @@
 package endpoint;
 
-import domain.PlayerDecoder;
-import domain.PlayerEncoder;
+import domain.decoder.PlayerDecoder;
+import domain.encoder.PlayerEncoder;
 import domain.Room;
 import service.ServerEndpointService;
 import service.impl.ServerEndpointServiceImpl;
 
-import javax.json.*;
 import javax.websocket.*;
-import javax.websocket.server.HandshakeRequest;
-import javax.websocket.server.ServerEndpointConfig;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 //izbaci usera iz seta kad zatvori sessio
@@ -33,7 +28,7 @@ public class ServerEndpoint{
     public void onOpen(Session session) throws IOException {
         logger.info("New player: " + session.getId());
         players.add(session);
-        session.getBasicRemote().sendText("Connected: SERVERRRRRRRR, RRRRRRESI");
+        session.getBasicRemote().sendText("Connected!");
     }
 
     @OnMessage
@@ -49,6 +44,9 @@ public class ServerEndpoint{
                 break;
             case "reconnect":
                 player = serverEndpointService.reconnect(player,rooms,session);
+                break;
+            case "updateUsername":
+                player = serverEndpointService.updateUsername(player,rooms,session);
                 break;
             default:
                 session.getBasicRemote().sendText("Wrong command!");

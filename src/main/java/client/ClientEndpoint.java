@@ -1,18 +1,13 @@
 package client;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.concurrent.CountDownLatch;
 import java.util.logging.Logger;
 
 import javax.websocket.*;
 
-import domain.PlayerDecoder;
-import domain.PlayerEncoder;
-import org.glassfish.tyrus.client.ClientManager;
+import domain.decoder.PlayerDecoder;
+import domain.encoder.PlayerEncoder;
 
 @javax.websocket.ClientEndpoint(decoders = PlayerDecoder.class, encoders = PlayerEncoder.class)
 public class ClientEndpoint {

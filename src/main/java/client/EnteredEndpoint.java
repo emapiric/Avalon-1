@@ -1,8 +1,5 @@
 package client;
 
-import domain.PlayerDecoder;
-import domain.PlayerEncoder;
-
 import javax.websocket.*;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;

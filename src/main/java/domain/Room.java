@@ -9,8 +9,10 @@ public class Room{
     private String roomId;
     private Set<Session> players;
     private Set<String> outOfGame;
-//    private List<domain.Player> players;
 
+//    private int nominationNumber;
+//    private int quest;
+//    private int numberOfPlayers
 
     public boolean isActive() {
         return active;
@@ -75,22 +77,5 @@ public class Room{
                 ", players=" + players +
                 '}';
     }
-
-//    private static int createRoomId() {
-//        int n = 4;
-//        String NumericString = "0123456789";
-//
-//        StringBuilder sb = new StringBuilder(n);
-//
-//        for (int i = 0; i < n; i++) {
-//            int index
-//                    = (int)(NumericString.length()
-//                    * Math.random());
-//            sb.append(NumericString
-//                    .charAt(index));
-//        }
-//        return Integer.parseInt(sb.toString());
-//    }
-
 
 }
