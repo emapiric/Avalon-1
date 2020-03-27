@@ -39,6 +39,7 @@ public class ServerEndpointServiceImpl implements ServerEndpointService {
             return player;
         }
         else {
+            player.setPlayerId(createId(4));
             addPlayer(player,rooms,session);
         }
 
@@ -105,17 +106,6 @@ public class ServerEndpointServiceImpl implements ServerEndpointService {
         session.getUserProperties().put("username",player.getUsername());
         session.getUserProperties().put("playerId",player.getPlayerId());
         session.getUserProperties().put("roomId",player.getRoomId());
-    }
-
-    @Override
-    public Player updateUsername(Player player, Set<Room> rooms, Session session) {
-        Room room = findRoom(player.getRoomId(),rooms);
-        for (Session s: room.getPlayers()
-             ) {
-            if(s.getId().equals(session.getId()))
-                s.getUserProperties().put("username",player.getUsername());
-        }
-        return player;
     }
 
     private static String createId(int n) {

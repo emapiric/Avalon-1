@@ -2,6 +2,7 @@ package domain;
 
 public class Player {
 
+
     private String command;
     private String username;
     private String playerId;
@@ -58,10 +59,10 @@ public class Player {
     @Override
     public String toString() {
         return "Player{" +
-                "username='" + username + '\'' +
+                "command='" + command + '\'' +
+                ", username='" + username + '\'' +
                 ", playerId='" + playerId + '\'' +
                 ", roomId='" + roomId + '\'' +
                 '}';
     }
-
 }

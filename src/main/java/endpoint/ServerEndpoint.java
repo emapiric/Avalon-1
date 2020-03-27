@@ -45,9 +45,6 @@ public class ServerEndpoint{
             case "reconnect":
                 player = serverEndpointService.reconnect(player,rooms,session);
                 break;
-            case "updateUsername":
-                player = serverEndpointService.updateUsername(player,rooms,session);
-                break;
             default:
                 session.getBasicRemote().sendText("Wrong command!");
                 return;
@@ -55,7 +52,6 @@ public class ServerEndpoint{
 
         try {
             System.out.println("I return " + player);
-            System.out.println("Iz session properites a: " + session.getUserProperties().get("username"));
             session.getBasicRemote().sendObject(player);
         } catch (EncodeException e) {
             e.printStackTrace();

@@ -5,7 +5,9 @@ import domain.decoder.CommandDecoder;
 import domain.decoder.PlayerDecoder;
 import domain.encoder.CommandEncoder;
 import domain.encoder.PlayerEncoder;
+import service.GameEndpointService;
 import service.RoomEndpointService;
+import service.impl.GameEndpointServiceImpl;
 import service.impl.RoomEndpointServiceImpl;
 
 import javax.websocket.*;
@@ -17,12 +19,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
-@ServerEndpoint(value = "/Server/{roomId}/{playerId}", decoders = CommandDecoder.class, encoders = CommandEncoder.class)
+@ServerEndpoint(value = "/Server/Game/{roomId}/{playerId}", decoders = CommandDecoder.class, encoders = CommandEncoder.class)
 public class GameEndpoint {
 
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
-    public RoomEndpointService roomEndpointService = new RoomEndpointServiceImpl();
+    public GameEndpointService gameEndpointService = new GameEndpointServiceImpl();
     public static Set<Room> rooms = Collections.synchronizedSet(new HashSet<Room>());
 
     @OnOpen

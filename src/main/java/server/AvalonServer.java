@@ -1,5 +1,6 @@
 package server;
 
+import endpoint.GameEndpoint;
 import endpoint.RoomEndpoint;
 import endpoint.ServerEndpoint;
 import org.glassfish.tyrus.server.Server;
@@ -18,7 +19,7 @@ public class AvalonServer {
     }
 
     public static void runServer() {
-        Server server = new Server("localhost", 9000, "/Avalon", ServerEndpoint.class, RoomEndpoint.class);
+        Server server = new Server("localhost", 9000, "/Avalon", ServerEndpoint.class, RoomEndpoint.class, GameEndpoint.class);
 
         try {
             server.start();

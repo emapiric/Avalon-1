@@ -10,7 +10,7 @@ import java.util.concurrent.CountDownLatch;
 
 public class Client {
 
-    public static final String SERVER = "ws://localhost:9000/Avalon/Server";
+    public static final String SERVER = "ws://localhost:9000/Avalon/Server/Game/roomid";
 
     public static void main(String[] args) throws Exception {
         final CountDownLatch startSignal = new CountDownLatch(1);

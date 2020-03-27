@@ -9,10 +9,9 @@ public class Room{
     private String roomId;
     private Set<Session> players;
     private Set<String> outOfGame;
-
-//    private int nominationNumber;
-//    private int quest;
-//    private int numberOfPlayers
+    private int nominationNumber;
+    private int quest;
+    private int numberOfPlayers;
 
     public boolean isActive() {
         return active;
