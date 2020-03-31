@@ -71,6 +71,7 @@ public class RoomEndpointServiceImpl implements RoomEndpointService {
 
     @Override
     public void startGame(String roomId,Set<Room> rooms) {
+        sendToAll("startGame",roomId,rooms);
         GameThread gameThread = new GameThread(serverEndpointService.findRoom(roomId,rooms));
         gameThread.start();
     }

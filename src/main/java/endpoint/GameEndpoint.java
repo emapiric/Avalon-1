@@ -36,6 +36,7 @@ public class GameEndpoint {
     @OnMessage
     public void onMessage(String message, Session session, @PathParam("roomId") String roomId, @PathParam("playerId") String playerId) {
         System.out.println("Username " + message);
+        session.getUserProperties().put("vote",message);
     }
 
     @OnClose
