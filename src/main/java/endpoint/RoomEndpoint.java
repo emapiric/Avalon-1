@@ -33,7 +33,7 @@ public class RoomEndpoint {
 
     @OnMessage
     public void onMessage(String message, Session session, @PathParam("roomId") String roomId, @PathParam("playerId") String playerId) {
-        System.out.println("Username " + message);
+//        System.out.println("Username " + message);
         switch (message){
             case "startGame":
                 roomEndpointService.startGame(roomId, rooms);

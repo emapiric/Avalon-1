@@ -28,7 +28,6 @@ public class ServerEndpoint{
     public void onOpen(Session session) throws IOException {
         logger.info("New player: " + session.getId());
         players.add(session);
-        session.getBasicRemote().sendText("Connected!");
     }
 
     @OnMessage

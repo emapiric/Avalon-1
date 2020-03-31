@@ -21,9 +21,8 @@ public class RoomEndpointServiceImpl implements RoomEndpointService {
         String playersInRoom = "";
         for (Iterator<Session> it = room.getPlayers().iterator(); it.hasNext(); ) {
             Session s = it.next();
-            System.out.println(s.getUserProperties().get("username") + " igrac za slanje");
-            if(!s.getUserProperties().get("username").equals("null") && s.getId() != session.getId()) {
-                playersInRoom = s.getUserProperties().get("username") + "," + playersInRoom;
+            if(!s.getUserProperties().get("username").equals("null")) {
+                playersInRoom += s.getUserProperties().get("username") + "," ;
             }
         }
         return playersInRoom;
@@ -59,10 +58,13 @@ public class RoomEndpointServiceImpl implements RoomEndpointService {
         Room room = serverEndpointService.findRoom(roomId,rooms);
         for (Iterator<Session> it = room.getPlayers().iterator(); it.hasNext(); ) {
             Session s = it.next();
-            try {
-                s.getBasicRemote().sendText(message);
-            } catch (IOException e) {
-                e.printStackTrace();
+            if(!s.getUserProperties().get("username").equals("null")) {
+                try {
+                    System.out.println(s.getUserProperties().get("username") + " saljem " + message);
+                    s.getBasicRemote().sendText(message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

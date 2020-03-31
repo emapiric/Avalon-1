@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
-@ServerEndpoint(value = "/Server/Game/{roomId}/{playerId}", decoders = CommandDecoder.class, encoders = CommandEncoder.class)
+@ServerEndpoint(value = "/Server/{roomId}/{playerId}/Game", decoders = CommandDecoder.class, encoders = CommandEncoder.class)
 public class GameEndpoint {
 
 
