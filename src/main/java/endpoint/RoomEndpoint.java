@@ -21,28 +21,43 @@ public class RoomEndpoint {
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
     public RoomEndpointService roomEndpointService = new RoomEndpointServiceImpl();
-
+    boolean firstPlayer;
+    int numberOfPlayers=0;
 
     public static Set<Room> rooms = ServerEndpoint.rooms;
 
     @OnOpen
     public void onOpen(Session session, @PathParam("roomId") String roomId, @PathParam("playerId") String playerId) throws IOException {
         logger.info("Connected in room: " + roomId);
-//        session.getBasicRemote().sendText("Connected in room: " + roomId);
+        if(firstPlayer==false){
+            rooms.add(new Room("1"));
+            firstPlayer=true;
+        }
+        session.getUserProperties().put("roomId",roomId);
+        session.getUserProperties().put("playerId",playerId);
+        Room room=new Room("i");
+        room.addPlayer(session);
+        session.getBasicRemote().sendText("You entered in a room");
+        numberOfPlayers++;
     }
 
     @OnMessage
     public void onMessage(String message, Session session, @PathParam("roomId") String roomId, @PathParam("playerId") String playerId) {
-//        System.out.println("Username " + message);
+
         switch (message){
             case "startGame":
                 roomEndpointService.startGame(roomId, rooms);
                 break;
+
             default:
+
                 roomEndpointService.newSession(message, roomId,playerId,rooms,session);
                 String playerInRoom = roomEndpointService.playersInRoom(roomId,playerId,rooms,session);
                 System.out.println("Players in room " + roomId +": " + playerInRoom);
                 roomEndpointService.sendToAll(playerInRoom,roomId,rooms);
+                if(numberOfPlayers==5){
+                    roomEndpointService.startGame(roomId,rooms);
+                }
                 break;
 
         }
