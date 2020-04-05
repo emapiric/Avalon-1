@@ -13,7 +13,7 @@ public class Client {
     int playerId;
 
 
-
+//ssss
 
     public static void main(String[] args) throws Exception {
         String Server="ws://localhost:9000/Avalon/Server/1/"+playerId();
