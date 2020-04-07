@@ -17,6 +17,8 @@ public class GameThread extends Thread{
 
     public void run(){
 
+        System.out.println("U game threadu sam"
+        );
 
         sendToAll("Usli ste u gameThread",room);
 
@@ -44,16 +46,18 @@ public class GameThread extends Thread{
 
     public void sendToAll(String message,Room room) {
 
+
+
         for (Iterator<Session> it = room.getPlayers().iterator(); it.hasNext(); ) {
             Session s = it.next();
-            if(!s.getUserProperties().get("username").equals("null")) {
+
                 try {
                     System.out.println(s.getUserProperties().get("username") + " saljem " + message);
                     s.getBasicRemote().sendText(message);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
+
         }
     }
 

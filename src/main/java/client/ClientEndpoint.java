@@ -24,9 +24,9 @@ public class ClientEndpoint {
     }
 
     @OnMessage
-    public void onMessage(domain.Player player, Session session) throws IOException {
-        System.out.println("server send: " + player);
-        session.getUserProperties().put("player",player);
+    public void onMessage(String message, Session session) throws IOException {
+        System.out.println("server send: " + message);
+
 
     }
 

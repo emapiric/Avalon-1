@@ -21,8 +21,9 @@ public class RoomEndpoint {
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
     public RoomEndpointService roomEndpointService = new RoomEndpointServiceImpl();
-    boolean firstPlayer;
-    int numberOfPlayers=0;
+    public ServerEndpointService serverEndpointService=new ServerEndpointServiceImpl();
+    static boolean firstPlayer;
+    static int numberOfPlayers=0;
 
     public static Set<Room> rooms = ServerEndpoint.rooms;
 
@@ -33,11 +34,15 @@ public class RoomEndpoint {
             rooms.add(new Room("1"));
             firstPlayer=true;
         }
+
         session.getUserProperties().put("roomId",roomId);
         session.getUserProperties().put("playerId",playerId);
-        Room room=new Room("i");
+        session.getUserProperties().put("username","Null");
+        Room room=serverEndpointService.findRoom("1",rooms);
+
         room.addPlayer(session);
         session.getBasicRemote().sendText("You entered in a room");
+        System.out.println(room.getPlayers().size()+" je broj igraca");
         numberOfPlayers++;
     }
 
@@ -50,12 +55,20 @@ public class RoomEndpoint {
                 break;
 
             default:
+                logger.info("Player id:"+session.getUserProperties().get("playerId"));
+                logger.info("Room id:"+session.getUserProperties().get("roomId"));
+
+                System.out.println(session.getUserProperties().get("username"));
 
                 roomEndpointService.newSession(message, roomId,playerId,rooms,session);
+                session.getUserProperties().put("username",message);
                 String playerInRoom = roomEndpointService.playersInRoom(roomId,playerId,rooms,session);
-                System.out.println("Players in room " + roomId +": " + playerInRoom);
+
+
                 roomEndpointService.sendToAll(playerInRoom,roomId,rooms);
-                if(numberOfPlayers==5){
+                System.out.println("Broj igraca je "+numberOfPlayers);
+                if(numberOfPlayers==3){
+                    System.out.println("Usao sam");
                     roomEndpointService.startGame(roomId,rooms);
                 }
                 break;
