@@ -41,8 +41,9 @@ public class RoomEndpointServiceImpl implements RoomEndpointService {
                 session.getUserProperties().put("username",message);
                 session.getUserProperties().put("roomId",roomId);
                 session.getUserProperties().put("playerId",playerId);
-                room.getPlayers().add(session);
                 room.getPlayers().remove(s);
+                room.getPlayers().add(session);
+
                 return;
             }
         }

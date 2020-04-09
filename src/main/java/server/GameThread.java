@@ -1,7 +1,10 @@
 package server;
 
+import com.google.gson.Gson;
+import domain.Command;
 import domain.Room;
 
+import javax.websocket.EncodeException;
 import javax.websocket.Session;
 import java.io.IOException;
 import java.util.Iterator;
@@ -17,10 +20,17 @@ public class GameThread extends Thread{
 
     public void run(){
 
-        System.out.println("U game threadu sam"
-        );
+
+        System.out.println("U game threadu sam");
 
         sendToAll("Usli ste u gameThread",room);
+
+        /*try {
+            Thread.sleep(25000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
+        sendToAll2("Thread koristi novi session",room);
 
 
         while(true){
@@ -42,6 +52,22 @@ public class GameThread extends Thread{
          * Vise od pola dalo DA onda se glasa za misiju =>
          *
          */
+    }
+
+    public void sendToAll2(String message,Room room){
+        Gson gson=new Gson();
+        Command command=new Command(message,message);
+        for (Iterator<Session> it = room.getPlayers().iterator(); it.hasNext(); ) {
+            Session s = it.next();
+
+            try {
+                System.out.println(s.getUserProperties().get("username") + " saljem " + message);
+                s.getBasicRemote().sendObject(gson.toJson(command));
+            } catch (IOException | EncodeException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
     public void sendToAll(String message,Room room) {

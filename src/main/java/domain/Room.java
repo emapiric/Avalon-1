@@ -27,11 +27,14 @@ public class Room{
         this.players = Collections.synchronizedSet(new HashSet<Session>());
     }
 
-//    public Room() {
-//        this.players = new LinkedList<domain.Player>();
-//        this.roomId = createRoomId();
-//    }
 
+    public int getNumberOfPlayers() {
+        return numberOfPlayers;
+    }
+
+    public void setNumberOfPlayers(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
+    }
 
     public Set<Session> getPlayers() {
         return players;
@@ -49,13 +52,6 @@ public class Room{
         this.roomId = roomId;
     }
 
-//    public List<domain.Player> getPlayers() {
-//        return players;
-//    }
-//
-//    public void setPlayers(List<domain.Player> players) {
-//        this.players = players;
-//    }
 
     public Set<String> getOutOfGame() {
         return outOfGame;

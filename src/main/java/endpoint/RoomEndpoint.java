@@ -51,6 +51,9 @@ public class RoomEndpoint {
 
         switch (message){
             case "startGame":
+                //Ovo sluzi da mi da podatke o broju igraca !
+               int numberOfPlayerinRoom= serverEndpointService.findRoom(roomId,rooms).getPlayers().size();
+               serverEndpointService.findRoom(roomId,rooms).setNumberOfPlayers(numberOfPlayerinRoom);
                 roomEndpointService.startGame(roomId, rooms);
                 break;
 
@@ -61,7 +64,7 @@ public class RoomEndpoint {
                 System.out.println(session.getUserProperties().get("username"));
 
                 roomEndpointService.newSession(message, roomId,playerId,rooms,session);
-                session.getUserProperties().put("username",message);
+
                 String playerInRoom = roomEndpointService.playersInRoom(roomId,playerId,rooms,session);
 
 

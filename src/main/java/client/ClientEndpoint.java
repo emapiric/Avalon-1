@@ -21,11 +21,20 @@ public class ClientEndpoint {
     public void onOpen(Session session) throws IOException, EncodeException {
         logger.info("Connected ... " + session.getId());
 
+
+
     }
 
     @OnMessage
     public void onMessage(String message, Session session) throws IOException {
         System.out.println("server send: " + message);
+
+        if(message.equals("Usli ste u gameThread")){
+            session.getUserProperties().put("end","Usli ste u gameThread");
+
+
+        }
+
 
 
     }

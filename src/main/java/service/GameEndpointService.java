@@ -20,4 +20,6 @@ public interface GameEndpointService {
 //    vraca: da li je pogodio assasin ko je merlin
 //    Yes/No
     String AssasinKill(Room room, Command command);
+    //Dodeljuje igracima uloge !
+    void setPlayersRoll(Room room,Command command);
 }
