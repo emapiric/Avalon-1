@@ -3,6 +3,9 @@ package service;
 import domain.Command;
 import domain.Room;
 
+import javax.websocket.EncodeException;
+import java.io.IOException;
+
 public interface GameEndpointService {
 
 //    vraca: svim player ima se salje spisak igraca
@@ -21,5 +24,5 @@ public interface GameEndpointService {
 //    Yes/No
     String AssasinKill(Room room, Command command);
     //Dodeljuje igracima uloge !
-    void setPlayersRoll(Room room,Command command);
+    void setPlayersRoll(Room room) throws IOException, EncodeException;
 }

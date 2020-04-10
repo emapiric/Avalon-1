@@ -33,11 +33,13 @@ public class Client {
         System.out.println("Ukucajte vas nickname");
 
         session.getBasicRemote().sendText(scanner.nextLine());
-        //Thread.sleep(20000);
 
+
+        session.getUserProperties().put("end","null");
+       /* Thread.sleep(15000);*/
         while(true){
 
-            if(session.getUserProperties().get("end")!=null){
+            if(!session.getUserProperties().get("end").equals("null")){
                 String message=session.getUserProperties().get("end").toString();
                 if(message.equals("Usli ste u gameThread")){
                     System.out.println("IZASAO IZ ROOMENDPOINT SERVER");
@@ -51,7 +53,9 @@ public class Client {
         //"/Server/{roomId}/{playerId}/Game"
         Server="ws://localhost:9000/Avalon/Server/1/"+client.playerId+"/Game";
 
-        session=clientManager.connectToServer(ClientGameEndpoint.class,new URI(Server));
+        Session session1=clientManager.connectToServer(ClientGameEndpoint.class,new URI(Server));
+
+
 
 
         while(true){

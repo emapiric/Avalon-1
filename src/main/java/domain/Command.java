@@ -8,7 +8,7 @@ public class Command {
     private String value;
     private String[] nominated;
 
-    public Command(String command, String value, String[] nominated) {
+    public Command(String command, String value, String...nominated) {
         this.command = command;
         this.value = value;
         this.nominated = nominated;

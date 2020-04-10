@@ -74,7 +74,9 @@ public class RoomEndpointServiceImpl implements RoomEndpointService {
     public void startGame(String roomId,Set<Room> rooms) {
         System.out.println("START GAME USAOOOO");
         sendToAll("startGame",roomId,rooms);
-        GameThread gameThread = new GameThread(serverEndpointService.findRoom(roomId,rooms));
+        GameThread GameThread=new GameThread(serverEndpointService.findRoom(roomId,rooms));
+        Thread gameThread=new Thread(GameThread,"g1");
+       // GameThread gameThread = new GameThread(serverEndpointService.findRoom(roomId,rooms));
         gameThread.start();
     }
 }

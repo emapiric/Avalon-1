@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 
 @ServerEndpoint(value = "/Server/{roomId}/{playerId}/Game", decoders = CommandDecoder.class, encoders = CommandEncoder.class)
@@ -31,11 +32,20 @@ public class GameEndpoint {
     public GameEndpointService gameEndpointService = new GameEndpointServiceImpl();
     public ServerEndpointService serverEndpointService= new ServerEndpointServiceImpl();
     public static Set<Room> rooms = endpoint.ServerEndpoint.rooms;
+    //Ovo govno dolje je valjda za mutex ! mutex.lock i mutex.unlock
+
+    public static ReentrantLock mutex=new ReentrantLock();
 
     @OnOpen
     public void onOpen(Session session, @PathParam("roomId") String roomId, @PathParam("playerId") String playerId) throws IOException {
         logger.info("Connected in room: " + roomId);
-        newSession(roomId,playerId,session);
+
+
+
+
+            newSession(roomId,playerId,session);
+
+
 
 
 
@@ -52,15 +62,17 @@ public class GameEndpoint {
     }
 
 
-    public void newSession(String roomId, String playerId,Session session) {
+    public  void newSession(String roomId, String playerId,Session session) {
         Room room = serverEndpointService.findRoom(roomId,rooms);
         if(room == null)
             System.out.println("mrtvi room null");
         for (Iterator<Session> it = room.getPlayers().iterator(); it.hasNext(); ) {
             Session s = it.next();
+
+
             System.out.println(s.getUserProperties().get("playerId") + " igrac");
             if (s.getUserProperties().get("playerId").equals(playerId)){
-                System.out.println("Menjam session");
+                System.out.println("Menjam session"+playerId);
                 String username=s.getUserProperties().get("username").toString();
 
                 session.getUserProperties().put("username",username);

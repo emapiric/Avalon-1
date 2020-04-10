@@ -29,7 +29,7 @@ public class ClientEndpoint {
     public void onMessage(String message, Session session) throws IOException {
         System.out.println("server send: " + message);
 
-        if(message.equals("Usli ste u gameThread")){
+        if(message.equals("startGame")){
             session.getUserProperties().put("end","Usli ste u gameThread");
 
 
