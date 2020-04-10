@@ -32,21 +32,21 @@ public class GameThread implements Runnable{
 
         try {
 
-            Thread.sleep(20000);
+            Thread.sleep(25000);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         sendToAll2("Thread koristi novi session",room.getPlayers());
 
-        /*try {
+        try {
             gameEndpointService.setPlayersRoll(room);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (EncodeException e) {
             e.printStackTrace();
         }
-*/
+
 
         while(true){
 

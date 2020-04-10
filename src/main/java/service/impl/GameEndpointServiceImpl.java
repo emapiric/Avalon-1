@@ -11,6 +11,7 @@ import javax.websocket.Session;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Random;
 
 public class GameEndpointServiceImpl implements GameEndpointService {
     @Override
@@ -36,11 +37,6 @@ public class GameEndpointServiceImpl implements GameEndpointService {
     @Override
     public void setPlayersRoll(Room room) throws IOException, EncodeException {
 
-        firstSetRoll(room);
-
-    }
-
-    private void firstSetRoll(Room room) throws IOException, EncodeException {
         int frequency=1;
         LinkedList<Session> listOfCharacters=new LinkedList<Session>();
         for (Iterator<Session> it = room.getPlayers().iterator(); it.hasNext(); ) {
@@ -58,30 +54,127 @@ public class GameEndpointServiceImpl implements GameEndpointService {
 
         }
 
-
-
-
     }
 
-    public void sendToServerRolls(Session session,LinkedList<Session> listOfCharacters) throws IOException, EncodeException {
+
+    private void sendToServerRolls(Session session,LinkedList<Session> listOfCharacters) throws IOException, EncodeException {
         if(session.getUserProperties().get("roll").equals("Merlin")){
+            Command command=null;
+            if(listOfCharacters.size()==5 || listOfCharacters.size()==6){
+                String Morgana=session.getUserProperties().get("Morgana").toString();
+                String Assassin=session.getUserProperties().get("Assassin").toString();
+                String Roll=session.getUserProperties().get("roll").toString();
+               command=new Command("roll",Roll,Morgana,Assassin);
+            }
+            if(listOfCharacters.size()==7 || listOfCharacters.size()==10){
+                String Morgana=session.getUserProperties().get("Morgana").toString();
+                String Assassin=session.getUserProperties().get("Assassin").toString();
+                String Oberon=session.getUserProperties().get("Oberon").toString();
+                String Roll=session.getUserProperties().get("roll").toString();
+                 command=new Command("roll",Roll,Morgana,Assassin,Oberon);
+            }
+
+            if(listOfCharacters.size()==8){
+                String Morgana=session.getUserProperties().get("Morgana").toString();
+                String Assassin=session.getUserProperties().get("Assassin").toString();
+                String Mordred=session.getUserProperties().get("Mordred").toString();
+
+                String Roll=session.getUserProperties().get("roll").toString();
+                command=new Command("roll",Roll,Morgana,Assassin,Mordred);
+            }
+
+            if(listOfCharacters.size()==9){
+                String Morgana=session.getUserProperties().get("Morgana").toString();
+                String Assassin=session.getUserProperties().get("Assassin").toString();
+                String Mordred=session.getUserProperties().get("Mordred").toString();
+                String Oberon=session.getUserProperties().get("Oberon").toString();
+
+                String Roll=session.getUserProperties().get("roll").toString();
+                 command=new Command("roll",Roll,Morgana,Assassin,Mordred,Oberon);
+            }
+
+
+            session.getBasicRemote().sendObject(command);
+        }
+
+        if(session.getUserProperties().get("roll").equals("Morgana")){
+            Command command=null;
+            if(listOfCharacters.size()>=5 && listOfCharacters.size()<=7) {
+
+                String Assassin=session.getUserProperties().get("Assassin").toString();
+                String Roll=session.getUserProperties().get("roll").toString();
+                command=new Command("roll",Roll,Assassin);
+            }
+
+            if(listOfCharacters.size()>=8 && listOfCharacters.size()<=10){
+
+                String Assassin=session.getUserProperties().get("Assassin").toString();
+                String Mordred=session.getUserProperties().get("Mordred").toString();
+
+                String Roll=session.getUserProperties().get("roll").toString();
+                command=new Command("roll",Roll,Assassin,Mordred);
+            }
+            session.getBasicRemote().sendObject(command);
+        }
+
+        if(session.getUserProperties().get("roll").equals("Percival")){
+            Command command;
+
+                String Merlin=session.getUserProperties().get("Merlin").toString();
+                String Morgana=session.getUserProperties().get("Morgana").toString();
+                String Roll=session.getUserProperties().get("roll").toString();
+                if(randomMorganaMerlin()==0)
+                command=new Command("roll",Roll,Merlin,Morgana);
+                else{
+                    command=new Command("roll",Roll,Morgana,Merlin);
+                }
+            session.getBasicRemote().sendObject(command);
+        }
+
+        if(session.getUserProperties().get("roll").equals("Assassin")){
+            Command command=null;
+            if(listOfCharacters.size()>=5 && listOfCharacters.size()<=7) {
+
+                String Morgana=session.getUserProperties().get("Morgana").toString();
+                String Roll=session.getUserProperties().get("roll").toString();
+                command=new Command("roll",Roll,Morgana);
+            }
+
+            if(listOfCharacters.size()>=8 && listOfCharacters.size()<=10){
+
+                String Morgana=session.getUserProperties().get("Morgana").toString();
+                String Mordred=session.getUserProperties().get("Mordred").toString();
+
+                String Roll=session.getUserProperties().get("roll").toString();
+                command=new Command("roll",Roll,Morgana,Mordred);
+            }
+            session.getBasicRemote().sendObject(command);
+        }
+
+        if(session.getUserProperties().get("roll").equals("Mordred")){
+            Command command=null;
+
             String Morgana=session.getUserProperties().get("Morgana").toString();
             String Assassin=session.getUserProperties().get("Assassin").toString();
-            String Mordred=session.getUserProperties().get("Mordred").toString();
-            String Oberon=session.getUserProperties().get("Oberon").toString();
+
+                String Roll=session.getUserProperties().get("roll").toString();
+                command=new Command("roll",Roll,Morgana,Assassin);
+            session.getBasicRemote().sendObject(command);
+            }
+
+        //Ostali su Pleb1,Pleb2,Pleb3,Oberon i onaj na Lancetron kako se vec zove...
+        else{
             String Roll=session.getUserProperties().get("roll").toString();
-
-
-            Command command=new Command("roll",Roll,Morgana,Assassin);
+            Command command=new Command("roll",Roll);
             session.getBasicRemote().sendObject(command);
         }
 
 
+
+
+
+
     }
-
-
-
-
     private void  giveTheNameToPlayers(int frequency,Session session,int numberOfPlayers,LinkedList<Session> listOfCharacters){
 
         switch(frequency){
@@ -162,6 +255,10 @@ public class GameEndpointServiceImpl implements GameEndpointService {
 
     }
 
+    private int randomMorganaMerlin(){
+        Random random=new Random();
+        return random.nextInt(2);
+    }
     private void addSpecialPlayer(int index,String name,Session session,LinkedList<Session> listOfCharacters){
         listOfCharacters.get(index).getUserProperties().put(name,session.getUserProperties().get("username"));
 

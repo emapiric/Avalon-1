@@ -70,7 +70,7 @@ public class RoomEndpoint {
 
                 roomEndpointService.sendToAll(playerInRoom,roomId,rooms);
                 System.out.println("Broj igraca je "+numberOfPlayers);
-                if(numberOfPlayers==3){
+                if(numberOfPlayers==5){
                     System.out.println("Usao sam");
                     roomEndpointService.startGame(roomId,rooms);
                 }

@@ -36,7 +36,7 @@ public class Client {
 
 
         session.getUserProperties().put("end","null");
-       /* Thread.sleep(15000);*/
+        Thread.sleep(18000);
         while(true){
 
             if(!session.getUserProperties().get("end").equals("null")){
@@ -50,7 +50,7 @@ public class Client {
         }
 
         System.out.println("Cekam drugo");
-        //"/Server/{roomId}/{playerId}/Game"
+
         Server="ws://localhost:9000/Avalon/Server/1/"+client.playerId+"/Game";
 
         Session session1=clientManager.connectToServer(ClientGameEndpoint.class,new URI(Server));
