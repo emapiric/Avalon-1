@@ -5,6 +5,7 @@ import domain.Room;
 
 import javax.websocket.EncodeException;
 import java.io.IOException;
+import java.util.HashMap;
 
 public interface GameEndpointService {
 
@@ -25,4 +26,8 @@ public interface GameEndpointService {
     String AssasinKill(Room room, Command command);
     //Dodeljuje igracima uloge !
     void setPlayersRoll(Room room) throws IOException, EncodeException;
+    void setOnMove(Room room, HashMap<Integer,String> hashMap);
+    void sendPlayersWhoIsOnMove(Room room,HashMap <Integer,String> hashMap,int onCurrentMove) throws IOException, EncodeException;
+
+
 }

@@ -9,6 +9,7 @@ import service.impl.GameEndpointServiceImpl;
 import javax.websocket.EncodeException;
 import javax.websocket.Session;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -20,6 +21,8 @@ public class GameThread implements Runnable{
         this.room = room;
     }
     public GameEndpointService gameEndpointService=new GameEndpointServiceImpl();
+    public HashMap<Integer,String> hashMap=new HashMap<>();
+    public int currentMove=1;
 
 
     public void run(){
@@ -39,14 +42,21 @@ public class GameThread implements Runnable{
         }
         sendToAll2("Thread koristi novi session",room.getPlayers());
 
-        try {
+       /* try {
             gameEndpointService.setPlayersRoll(room);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (EncodeException e) {
             e.printStackTrace();
+        }*/
+    gameEndpointService.setOnMove(room,hashMap);
+        try {
+            gameEndpointService.sendPlayersWhoIsOnMove(room,hashMap,currentMove);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (EncodeException e) {
+            e.printStackTrace();
         }
-
 
         while(true){
 
