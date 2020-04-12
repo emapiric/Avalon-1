@@ -38,15 +38,15 @@ public class Client {
 
 
         session.getUserProperties().put("end","null");
-        Thread.sleep(18000);
+      //  Thread.sleep(18000);
         while(true){
 
-            if(!session.getUserProperties().get("end").equals("null")){
-                String message=session.getUserProperties().get("end").toString();
-                if(message.equals("Usli ste u gameThread")){
-                    System.out.println("IZASAO IZ ROOMENDPOINT SERVER");
-                    break;
-                }
+                if(!session.getUserProperties().get("end").equals("null")){
+                    String message=session.getUserProperties().get("end").toString();
+                    if(message.equals("Usli ste u gameThread")){
+                        System.out.println("IZASAO IZ ROOMENDPOINT SERVER");
+                        break;
+                    }
 
             }
         }
