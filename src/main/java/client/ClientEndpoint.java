@@ -36,8 +36,8 @@ public class ClientEndpoint {
 
     @OnClose
     public void onClose(Session session, CloseReason closeReason) {
-        logger.info(String.format("Session %s close because of %s", session.getId(), closeReason));
-        latch.countDown();
+//        logger.info(String.format("Session %s close because of %s", session.getId(), closeReason));
+//        latch.countDown();
     }
 
 }

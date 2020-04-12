@@ -44,11 +44,8 @@ public class GameThread implements Runnable{
 
         System.out.println("KRECEM DALJE");
 
-        sendToAll2("Thread koristi novi session",room.getPlayers());
+//        sendToAll2("Thread koristi novi session",room.getPlayers());
 
-        System.out.println("dedlim uloge");
-        System.out.println("saljem uloge");
-        sendToAll2("Ti si merlin", room.getPlayers());
 
 //        Thread thread = new Thread(new Runnable() {
 //                @Override
@@ -88,33 +85,21 @@ public class GameThread implements Runnable{
 //            });
 //        thread.start();
 //
-//
-//
-//
-//        try {
-//
-//            Thread.sleep(25000);
-//
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        sendToAll2("Thread koristi novi session",room.getPlayers());
-//
-//       try {
-//            gameEndpointService.setPlayersRoll(room);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (EncodeException e) {
-//            e.printStackTrace();
-//        }
-//    gameEndpointService.setOnMove(room,hashMap);
-//        try {
-//            gameEndpointService.sendPlayersWhoIsOnMove(room,hashMap,currentMove);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (EncodeException e) {
-//            e.printStackTrace();
-//        }
+       try {
+            gameEndpointService.setPlayersRoll(room);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (EncodeException e) {
+            e.printStackTrace();
+        }
+    gameEndpointService.setOnMove(room,hashMap);
+        try {
+            gameEndpointService.sendPlayersWhoIsOnMove(room,hashMap,currentMove);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (EncodeException e) {
+            e.printStackTrace();
+        }
 
 
 

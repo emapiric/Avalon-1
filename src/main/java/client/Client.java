@@ -56,7 +56,7 @@ public class Client {
 
         Server="ws://localhost:9000/Avalon/Server/1/"+client.playerId+"/Game";
 
-        Session session1=clientManager.connectToServer(EnteredEndpoint.class,new URI(Server));
+        Session session1=clientManager.connectToServer(ClientGameEndpoint.class,new URI(Server));
 
         session1.getUserProperties().put("username",userName);
 

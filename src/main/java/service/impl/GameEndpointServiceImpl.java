@@ -3,6 +3,7 @@ package service.impl;
 
 import LogicOfGame.OnMove.OnMove;
 //import LogicOfGame.PlayersRoll.PlayersRollMetods;
+import LogicOfGame.PlayersRoll.PlayersRollMetods;
 import domain.Command;
 import domain.Room;
 import service.GameEndpointService;
@@ -40,8 +41,8 @@ public class GameEndpointServiceImpl implements GameEndpointService {
     @Override
     public void setPlayersRoll(Room room) throws IOException, EncodeException {
 
-//        PlayersRollMetods playersRollMetods=new PlayersRollMetods();
-//        playersRollMetods.setPlayersRoll(room);
+        PlayersRollMetods playersRollMetods=new PlayersRollMetods();
+        playersRollMetods.setPlayersRoll(room);
 //
 
     }

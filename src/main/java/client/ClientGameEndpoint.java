@@ -30,7 +30,7 @@ public class ClientGameEndpoint {
 
     @OnMessage
     public void onMessage(Command command, Session session) throws IOException {
-
+        System.out.println(command);
         switch (command.getCommand()) {
             case "roll":
                 System.out.println("Your roll is " + command.getValue());
@@ -85,14 +85,12 @@ public class ClientGameEndpoint {
 
         }
 
-
     }
-
 
     @OnClose
     public void onClose(Session session, CloseReason closeReason) {
         logger.info(String.format("Session %s close because of %s", session.getId(), closeReason));
-
+        logger.info("Ne treba da se zatvori");
     }
 
 
