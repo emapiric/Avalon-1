@@ -29,73 +29,92 @@ public class GameThread implements Runnable{
      public LinkedList<String> nameVotes=new LinkedList<>();
      public int voteNumber=0;
 
+     public static boolean playersConnected = false;
+
     public void run(){
 
-        Thread thread=    new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    room.setOnMovePlayer(false);
-                    System.out.println("Current move is"+currentMove);
-                    while(true){
-
-                        try {
-                            wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        if(room.IsOnMovePlayer()==true){
-                            System.out.println("EO ME");
-                            if(currentMove==room.getPlayers().size()){
-                                currentMove=1;
-                            }
-                            else{
-
-                                currentMove++;
-                                System.out.println("Current move is now "+currentMove);
-                                try {
-                                    gameEndpointService.sendPlayersWhoIsOnMove(room,hashMap,currentMove);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                } catch (EncodeException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            room.setOnMovePlayer(false);
-                        }
-
-                    }
-                }
-            });
-        thread.start();
-
-
-
-
-        try {
-
-            Thread.sleep(25000);
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        //Cekam igrace da udju
+        while(!playersConnected){
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+
+        System.out.println("KRECEM DALJE");
+
         sendToAll2("Thread koristi novi session",room.getPlayers());
 
-       try {
-            gameEndpointService.setPlayersRoll(room);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (EncodeException e) {
-            e.printStackTrace();
-        }
-    gameEndpointService.setOnMove(room,hashMap);
-        try {
-            gameEndpointService.sendPlayersWhoIsOnMove(room,hashMap,currentMove);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (EncodeException e) {
-            e.printStackTrace();
-        }
+        System.out.println("dedlim uloge");
+        System.out.println("saljem uloge");
+        sendToAll2("Ti si merlin", room.getPlayers());
+
+//        Thread thread = new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    room.setOnMovePlayer(false);
+//                    System.out.println("Current move is " + currentMove);
+//                    while(true){
+//
+//                        try {
+//                            wait();
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                        if(room.IsOnMovePlayer()==true){
+//                            System.out.println("EO ME");
+//                            if(currentMove==room.getPlayers().size()){
+//                                currentMove=1;
+//                            }
+//                            else{
+//
+//                                currentMove++;
+//                                System.out.println("Current move is now "+currentMove);
+//                                try {
+//                                    gameEndpointService.sendPlayersWhoIsOnMove(room,hashMap,currentMove);
+//                                } catch (IOException e) {
+//                                    e.printStackTrace();
+//                                } catch (EncodeException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//
+//                            room.setOnMovePlayer(false);
+//                        }
+//
+//                    }
+//                }
+//            });
+//        thread.start();
+//
+//
+//
+//
+//        try {
+//
+//            Thread.sleep(25000);
+//
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        sendToAll2("Thread koristi novi session",room.getPlayers());
+//
+//       try {
+//            gameEndpointService.setPlayersRoll(room);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (EncodeException e) {
+//            e.printStackTrace();
+//        }
+//    gameEndpointService.setOnMove(room,hashMap);
+//        try {
+//            gameEndpointService.sendPlayersWhoIsOnMove(room,hashMap,currentMove);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (EncodeException e) {
+//            e.printStackTrace();
+//        }
 
 
 
@@ -127,9 +146,6 @@ public class GameThread implements Runnable{
 
 
     public void sendToAll(String message,Room room) {
-
-
-
         for (Iterator<Session> it = room.getPlayers().iterator(); it.hasNext(); ) {
             Session s = it.next();
 

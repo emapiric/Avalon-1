@@ -24,12 +24,13 @@ public class RoomEndpoint {
     public ServerEndpointService serverEndpointService=new ServerEndpointServiceImpl();
     static boolean firstPlayer;
     static int numberOfPlayers=0;
-
     public static Set<Room> rooms = ServerEndpoint.rooms;
 
     @OnOpen
     public void onOpen(Session session, @PathParam("roomId") String roomId, @PathParam("playerId") String playerId) throws IOException {
         logger.info("Connected in room: " + roomId);
+//        session.getBasicRemote().sendText("Connected in room: " + roomId);
+
         if(firstPlayer==false){
             rooms.add(new Room("1"));
             firstPlayer=true;
@@ -48,12 +49,25 @@ public class RoomEndpoint {
 
     @OnMessage
     public void onMessage(String message, Session session, @PathParam("roomId") String roomId, @PathParam("playerId") String playerId) {
+//        System.out.println("Username " + message);
+//        switch (message){
+////            case "startGame":
+////                roomEndpointService.startGame(roomId, rooms);
+////                break;
+////            default:
+////                roomEndpointService.newSession(message, roomId,playerId,rooms,session);
+////                String playerInRoom = roomEndpointService.playersInRoom(roomId,playerId,rooms,session);
+////                System.out.println("Players in room " + roomId +": " + playerInRoom);
+////                roomEndpointService.sendToAll(playerInRoom,roomId,rooms);
+////                break;
+////
+////        }
 
         switch (message){
             case "startGame":
                 //Ovo sluzi da mi da podatke o broju igraca !
-               int numberOfPlayerinRoom= serverEndpointService.findRoom(roomId,rooms).getPlayers().size();
-               serverEndpointService.findRoom(roomId,rooms).setNumberOfPlayers(numberOfPlayerinRoom);
+                int numberOfPlayerinRoom= serverEndpointService.findRoom(roomId,rooms).getPlayers().size();
+                serverEndpointService.findRoom(roomId,rooms).setNumberOfPlayers(numberOfPlayerinRoom);
                 roomEndpointService.startGame(roomId, rooms);
                 break;
 
@@ -71,7 +85,6 @@ public class RoomEndpoint {
                 roomEndpointService.sendToAll(playerInRoom,roomId,rooms);
                 System.out.println("Broj igraca je "+numberOfPlayers);
                 if(numberOfPlayers==5){
-                    System.out.println("Usao sam");
                     int numberOfPlayerinRoom2= serverEndpointService.findRoom(roomId,rooms).getPlayers().size();
                     serverEndpointService.findRoom(roomId,rooms).setNumberOfPlayers(numberOfPlayerinRoom2);
                     roomEndpointService.startGame(roomId,rooms);
@@ -79,11 +92,12 @@ public class RoomEndpoint {
                 break;
 
         }
+
     }
 
     @OnClose
     public void onClose(Session session, CloseReason closeReason) {
-        logger.info(String.format("Session %s closed because of %s", session.getId(), closeReason));
+//        logger.info(String.format("Session %s closed because of %s", session.getId(), closeReason));
     }
 
 }

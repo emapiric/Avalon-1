@@ -20,9 +20,6 @@ public class ClientEndpoint {
     @OnOpen
     public void onOpen(Session session) throws IOException, EncodeException {
         logger.info("Connected ... " + session.getId());
-
-
-
     }
 
     @OnMessage
@@ -32,10 +29,7 @@ public class ClientEndpoint {
         if(message.equals("startGame")){
             session.getUserProperties().put("end","Usli ste u gameThread");
 
-
         }
-
-
 
     }
 

@@ -6,6 +6,7 @@ import domain.decoder.CommandDecoder;
 import domain.decoder.PlayerDecoder;
 import domain.encoder.CommandEncoder;
 import domain.encoder.PlayerEncoder;
+import server.GameThread;
 import service.GameEndpointService;
 import service.RoomEndpointService;
 import service.ServerEndpointService;
@@ -39,10 +40,13 @@ public class GameEndpoint {
 
     @OnOpen
     public void onOpen(Session session, @PathParam("roomId") String roomId, @PathParam("playerId") String playerId) throws IOException {
-        logger.info("Connected in room: " + roomId);
+//        logger.info("Connected in room: " + roomId);
 
             newSession(roomId,playerId,session);
-
+            if(allConnected(serverEndpointService.findRoom(roomId,rooms).getPlayers())){
+                GameThread.playersConnected = true;
+                System.out.println("Postavio ga");
+            }
     }
 
     @OnMessage
@@ -77,6 +81,16 @@ public class GameEndpoint {
         logger.info(String.format("Session %s closed because of %s", session.getId(), closeReason));
     }
 
+    public boolean allConnected(Set<Session> players){
+        for (Iterator<Session> it = players.iterator(); it.hasNext(); ) {
+            Session s = it.next();
+                if(s.getUserProperties().get("connected").equals("false")){
+                    return false;
+                }
+            }
+        logger.info("SIBAJ DALJE!");
+        return true;
+    }
 
     public  void newSession(String roomId, String playerId,Session session) {
         Room room = serverEndpointService.findRoom(roomId,rooms);
@@ -94,6 +108,7 @@ public class GameEndpoint {
                 session.getUserProperties().put("username",username);
                 session.getUserProperties().put("roomId",roomId);
                 session.getUserProperties().put("playerId",playerId);
+                session.getUserProperties().put("connected","true");
                 room.getPlayers().remove(s);
                 room.getPlayers().add(session);
 
