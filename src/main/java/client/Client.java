@@ -32,7 +32,9 @@ public class Client {
         Session session=clientManager.connectToServer(ClientEndpoint.class,new URI(Server));
         System.out.println("Ukucajte vas nickname");
 
-        session.getBasicRemote().sendText(scanner.nextLine());
+        String userName=scanner.nextLine();
+        session.getBasicRemote().sendText(userName);
+
 
 
         session.getUserProperties().put("end","null");
@@ -55,6 +57,7 @@ public class Client {
 
         Session session1=clientManager.connectToServer(ClientGameEndpoint.class,new URI(Server));
 
+        session1.getUserProperties().put("username",userName);
 
 
 

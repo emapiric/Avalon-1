@@ -35,25 +35,41 @@ public class GameEndpoint {
     //Ovo govno dolje je valjda za mutex ! mutex.lock i mutex.unlock
 
     public static ReentrantLock mutex=new ReentrantLock();
+    public int nesto=0;
 
     @OnOpen
     public void onOpen(Session session, @PathParam("roomId") String roomId, @PathParam("playerId") String playerId) throws IOException {
         logger.info("Connected in room: " + roomId);
 
-
-
-
             newSession(roomId,playerId,session);
-
-
-
-
 
     }
 
     @OnMessage
     public void onMessage(Command command, Session session, @PathParam("roomId") String roomId, @PathParam("playerId") String playerId) {
 
+        switch(command.getCommand()){
+            case "nominated":
+                serverEndpointService.findRoom(roomId,rooms).setNominated(command.getNominated());
+
+                sendNominationToAllPlayers(command.getNominated(),roomId);
+
+               // serverEndpointService.findRoom(roomId,rooms).setOnMovePlayer(true);
+
+
+
+                break;
+
+            case "vote":
+                serverEndpointService.findRoom(roomId,rooms).setNameVote(session.getUserProperties().get("username").toString());
+                serverEndpointService.findRoom(roomId,rooms).setVote(command.isAccepted());
+
+
+              //session.getUserProperties().put("vote",command.isAccepted());
+
+
+                break;
+        }
     }
 
     @OnClose
@@ -84,6 +100,25 @@ public class GameEndpoint {
                 return;
             }
         }
+    }
+
+    public void sendNominationToAllPlayers(String[] nominated,String roomId){
+        Room room = serverEndpointService.findRoom(roomId,rooms);
+        Command command=new Command("nominated",null,nominated);
+        if(room == null)
+            System.out.println("mrtvi room null");
+        for (Iterator<Session> it = room.getPlayers().iterator(); it.hasNext(); ) {
+            Session s = it.next();
+            try {
+                s.getBasicRemote().sendObject(command);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (EncodeException e) {
+                e.printStackTrace();
+            }
+
+        }
+
     }
 
 }

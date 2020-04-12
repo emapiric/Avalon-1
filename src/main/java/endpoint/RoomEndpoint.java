@@ -72,6 +72,8 @@ public class RoomEndpoint {
                 System.out.println("Broj igraca je "+numberOfPlayers);
                 if(numberOfPlayers==5){
                     System.out.println("Usao sam");
+                    int numberOfPlayerinRoom2= serverEndpointService.findRoom(roomId,rooms).getPlayers().size();
+                    serverEndpointService.findRoom(roomId,rooms).setNumberOfPlayers(numberOfPlayerinRoom2);
                     roomEndpointService.startGame(roomId,rooms);
                 }
                 break;

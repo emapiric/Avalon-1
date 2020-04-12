@@ -3,6 +3,7 @@ package server;
 import com.google.gson.Gson;
 import domain.Command;
 import domain.Room;
+import domain.Vote;
 import service.GameEndpointService;
 import service.impl.GameEndpointServiceImpl;
 
@@ -11,6 +12,7 @@ import javax.websocket.Session;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Set;
 
 public class GameThread implements Runnable{
@@ -23,12 +25,49 @@ public class GameThread implements Runnable{
     public GameEndpointService gameEndpointService=new GameEndpointServiceImpl();
     public HashMap<Integer,String> hashMap=new HashMap<>();
     public int currentMove=1;
-
+     public LinkedList<Boolean> votes=new LinkedList<>();
+     public LinkedList<String> nameVotes=new LinkedList<>();
+     public int voteNumber=0;
 
     public void run(){
 
+        Thread thread=    new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    room.setOnMovePlayer(false);
+                    System.out.println("Current move is"+currentMove);
+                    while(true){
 
-        System.out.println("U game threadu sam");
+                        try {
+                            wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        if(room.IsOnMovePlayer()==true){
+                            System.out.println("EO ME");
+                            if(currentMove==room.getPlayers().size()){
+                                currentMove=1;
+                            }
+                            else{
+
+                                currentMove++;
+                                System.out.println("Current move is now "+currentMove);
+                                try {
+                                    gameEndpointService.sendPlayersWhoIsOnMove(room,hashMap,currentMove);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } catch (EncodeException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            room.setOnMovePlayer(false);
+                        }
+
+                    }
+                }
+            });
+        thread.start();
 
 
 
@@ -42,13 +81,13 @@ public class GameThread implements Runnable{
         }
         sendToAll2("Thread koristi novi session",room.getPlayers());
 
-       /* try {
+       try {
             gameEndpointService.setPlayersRoll(room);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (EncodeException e) {
             e.printStackTrace();
-        }*/
+        }
     gameEndpointService.setOnMove(room,hashMap);
         try {
             gameEndpointService.sendPlayersWhoIsOnMove(room,hashMap,currentMove);
@@ -58,21 +97,15 @@ public class GameThread implements Runnable{
             e.printStackTrace();
         }
 
+
+
         while(true){
 
         }
 
-        /**
-         *
-         * LOGIKA IGRICE
-         *
-         * Poslati svima koji su likovi
-         * Prvi igrac daje predlog. server dobija command objekat sa listom ljudi koje je on predlozio
-         * Ako je 4. predlog onda se bira izmedju 4 i 5 igraca
-         *
-         * Vise od pola dalo DA onda se glasa za misiju =>
-         *
-         */
+
+
+
     }
 
     public void sendToAll2(String message,Set<Session> players){
@@ -80,6 +113,7 @@ public class GameThread implements Runnable{
         Command command=new Command(message,message);
         for (Iterator<Session> it = room.getPlayers().iterator(); it.hasNext(); ) {
             Session s = it.next();
+            s.getUserProperties().put("vote","null");
 
             try {
                 System.out.println(s.getUserProperties().get("username") + " saljem " + message);
@@ -90,6 +124,7 @@ public class GameThread implements Runnable{
 
         }
     }
+
 
     public void sendToAll(String message,Room room) {
 
