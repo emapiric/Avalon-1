@@ -30,7 +30,7 @@ public class GameEndpoint {
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
     public GameEndpointService gameEndpointService = new GameEndpointServiceImpl();
-    public ServerEndpointService serverEndpointService= new ServerEndpointServiceImpl();
+    public static ServerEndpointService serverEndpointService= new ServerEndpointServiceImpl();
     public static Set<Room> rooms = endpoint.ServerEndpoint.rooms;
     //Ovo govno dolje je valjda za mutex ! mutex.lock i mutex.unlock
 
@@ -41,7 +41,16 @@ public class GameEndpoint {
     public void onOpen(Session session, @PathParam("roomId") String roomId, @PathParam("playerId") String playerId) throws IOException {
         logger.info("Connected in room: " + roomId);
 
-            newSession(roomId,playerId,session);
+
+        try {
+            session.wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        newSession(roomId,playerId,session);
+
+
 
     }
 
@@ -54,7 +63,7 @@ public class GameEndpoint {
 
                 sendNominationToAllPlayers(command.getNominated(),roomId);
 
-               // serverEndpointService.findRoom(roomId,rooms).setOnMovePlayer(true);
+               serverEndpointService.findRoom(roomId,rooms).setOnMovePlayer(true);
 
 
 
@@ -78,7 +87,7 @@ public class GameEndpoint {
     }
 
 
-    public  void newSession(String roomId, String playerId,Session session) {
+    public static synchronized void newSession(String roomId, String playerId,Session session) {
         Room room = serverEndpointService.findRoom(roomId,rooms);
         if(room == null)
             System.out.println("mrtvi room null");

@@ -67,18 +67,18 @@ public class GameThread implements Runnable{
                     }
                 }
             });
-        thread.start();
+     //   thread.start();
 
 
 
 
-        try {
+        /*try {
 
             Thread.sleep(25000);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
         sendToAll2("Thread koristi novi session",room.getPlayers());
 
        try {
@@ -99,10 +99,13 @@ public class GameThread implements Runnable{
 
 
 
-        while(true){
+
+
+        while(room.IsOnMovePlayer()==false){
 
         }
 
+        System.out.println("ISPOD OVOG SRANJA SAM ! ");
 
 
 
