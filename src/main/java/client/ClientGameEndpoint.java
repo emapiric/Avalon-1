@@ -209,9 +209,6 @@ public class ClientGameEndpoint {
         }
 
 
-
-
-
     }
 
     public void showNominated(String[] nameVotes,Boolean[] votes){
