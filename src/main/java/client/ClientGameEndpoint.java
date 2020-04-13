@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import domain.Command;
 import domain.decoder.CommandDecoder;
 import domain.encoder.CommandEncoder;
+import service.ServerEndpointService;
+import service.impl.ServerEndpointServiceImpl;
 
 import javax.websocket.*;
 import java.io.IOException;
@@ -103,11 +105,12 @@ public class ClientGameEndpoint {
 
 
     public void nominatedPlayersToMission( int numberOfPlayers,Session session) {
+
         switch (missions) {
 
             case 1:
 
-        messageClient(missions,numberOfPlayers,session);
+        messageClient(numberOfPlayers,session);
                 break;
 
 
@@ -131,9 +134,10 @@ public class ClientGameEndpoint {
 
 
         }
+        missions++;
     }
 
-    public void messageClient(int missions, int numberOfPlayers, Session session) {
+    public void messageClient( int numberOfPlayers, Session session) {
         Command command = null;
 
         //Dvoje saljem
@@ -148,7 +152,8 @@ public class ClientGameEndpoint {
 
         //Troje saljem
 
-    /*    if((missions==2 || missions==4 || missions==5) ){
+      if(((missions==2 || missions>=4) && numberOfPlayers==5)||((missions==2 || missions==4) && numberOfPlayers==6)
+      || (numberOfPlayers==7 && missions==2|| missions==3) || (missions==1 && numberOfPlayers>=8)) {
             System.out.println("Izaberite prvog igraca");
             String playerSend1=scanner.nextLine();
             System.out.println("Izaberite drugog igraca");
@@ -161,7 +166,7 @@ public class ClientGameEndpoint {
         }
 
         //Cetvoro
-
+/*
         if(){
 
 
@@ -217,9 +222,10 @@ public class ClientGameEndpoint {
 
     }
     public boolean areYouNominated(String[] nameVotes,Session  session){
+        System.out.println("NOMINATED METOD");
 
         for (int i = 0; i <nameVotes.length ; i++) {
-            if(nameVotes.equals(session.getUserProperties().get("username")))
+            if(nameVotes[i].equals(session.getUserProperties().get("username")))
                 return true;
         }
             return false;

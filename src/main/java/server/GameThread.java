@@ -70,7 +70,9 @@ public class GameThread implements Runnable{
             if(room.IsOnMovePlayer()==true){
                 System.out.println("Ukinuo sam se ");
                 currentMove++;
-                if(currentMove==room.getNumberOfPlayers()){
+                System.out.println("Trenutni potez je "+currentMove);
+                if(currentMove==room.getNumberOfPlayers()+1){
+                    System.out.println("Opet sam 1");
                     currentMove=1;
                     try {
                         gameEndpointService.sendPlayersWhoIsOnMove(room,hashMap,currentMove);

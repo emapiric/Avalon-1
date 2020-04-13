@@ -33,9 +33,9 @@ public class VoteInMission extends Vote {
                     Command command=new Command("missionFinished","failed",getNominated(),numberOfNegativVotes());
                         sendVotes(command);
                 }
-            getVotes().remove();
-            getVoteNames().remove();
-            playerInMission=1;
+            getVotes().remove(getVotes());
+            getVoteNames().remove(getVoteNames());
+            setVoteNumber(1);
                 quest++;
                 return 0;
         }

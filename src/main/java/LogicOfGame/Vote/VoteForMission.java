@@ -38,17 +38,22 @@ public class VoteForMission extends Vote {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                for (String s:getNominated()) {
+
+                    System.out.println(s);
+                }
                 Command command1=new Command("missionStarted",null,getNominated());
-                getVoteNames().remove();
-                getVotes().remove();
+
+                getVoteNames().removeAll(getVoteNames());
+                getVotes().removeAll(getVotes());
                 setVoteNumber(1);
-                sendVotes(command);
+                sendVotes(command1);
                 //Ako je misija pocela,vraca 0
                 return 0;
             }
             else{
-                getVoteNames().remove();
-                getVotes().remove();
+                getVoteNames().removeAll(getVoteNames());
+                getVotes().removeAll(getVotes());
                 setVoteNumber(1);
                 //Ako nije pocela vraca 1
             return 1;

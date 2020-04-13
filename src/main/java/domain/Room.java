@@ -2,10 +2,7 @@ package domain;
 
 import LogicOfGame.Vote.VoteForMission;
 import LogicOfGame.Vote.VoteInMission;
-
-import javax.websocket.EncodeException;
 import javax.websocket.Session;
-import java.io.IOException;
 import java.util.*;
 
 public class Room{
@@ -14,13 +11,8 @@ public class Room{
     private String roomId;
     private Set<Session> players;
     private Set<String> outOfGame;
-    private int nominationNumber;
-    private int quest;
     private int numberOfPlayers;
     private boolean onMovePlayer;
-    private int voteNumber=1;
-    private LinkedList<String> voteNames=new LinkedList<String>();
-    private LinkedList<Boolean> votes=new LinkedList<Boolean>();
     private String[]nominated;
 
     //Predstavlja nominovane igrace!
@@ -91,21 +83,6 @@ public class Room{
         players.add(session);
     }
 
-    public void sendVotes(Command command){
-
-        for (Iterator<Session> it = getPlayers().iterator(); it.hasNext(); ) {
-            Session s = it.next();
-
-            try {
-
-                s.getBasicRemote().sendObject(command);
-            } catch (IOException | EncodeException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-    }
 
     @Override
     public String toString() {

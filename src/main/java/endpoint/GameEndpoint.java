@@ -30,15 +30,15 @@ public class GameEndpoint {
 
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
-    public GameEndpointService gameEndpointService = new GameEndpointServiceImpl();
     public ServerEndpointService serverEndpointService= new ServerEndpointServiceImpl();
     public static Set<Room> rooms = endpoint.ServerEndpoint.rooms;
-
-    public int nesto=0;
+    public static boolean wait=true;
 
     @OnOpen
     public void onOpen(Session session, @PathParam("roomId") String roomId, @PathParam("playerId") String playerId) throws IOException {
 //        logger.info("Connected in room: " + roomId);
+
+
 
             newSession(roomId,playerId,session);
             if(allConnected(serverEndpointService.findRoom(roomId,rooms).getPlayers())){
@@ -57,7 +57,11 @@ public class GameEndpoint {
 
                 sendNominationToAllPlayers(command.getNominated(),roomId);
                 serverEndpointService.findRoom(roomId,rooms).voteInMission.setPlayerInMission(command.getNominated().length);
-              //  serverEndpointService.findRoom(roomId,rooms).setOnMovePlayer(true);
+                serverEndpointService.findRoom(roomId,rooms).voteForMission.setNominated(command.getNominated());
+                serverEndpointService.findRoom(roomId,rooms).voteInMission.setNominated(command.getNominated());
+
+
+                //  serverEndpointService.findRoom(roomId,rooms).setOnMovePlayer(true);
 
                 break;
 
@@ -117,7 +121,6 @@ public class GameEndpoint {
             System.out.println("mrtvi room null");
         for (Iterator<Session> it = room.getPlayers().iterator(); it.hasNext(); ) {
             Session s = it.next();
-
 
             System.out.println(s.getUserProperties().get("playerId") + " igrac");
             if (s.getUserProperties().get("playerId").equals(playerId)){
