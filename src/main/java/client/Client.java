@@ -39,6 +39,7 @@ public class Client {
 
         session.getUserProperties().put("end","null");
 
+        System.out.println("Tvoj player id " + client.playerId);
         while(true){
 
                 if(!session.getUserProperties().get("end").equals("null")){
@@ -51,7 +52,8 @@ public class Client {
             }
         }
 
-        System.out.println("Cekam drugo");
+//        System.out.println("Cekam drugo");
+        System.out.println("Tvoj player id " + client.playerId);
         session.close();
 
         Server="ws://localhost:9000/Avalon/Server/1/"+client.playerId+"/Game";

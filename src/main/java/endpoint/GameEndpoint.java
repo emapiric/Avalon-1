@@ -33,20 +33,30 @@ public class GameEndpoint {
     public ServerEndpointService serverEndpointService= new ServerEndpointServiceImpl();
     public static Set<Room> rooms = endpoint.ServerEndpoint.rooms;
     public static boolean wait=true;
+    public static boolean newSessionOver = false;
 
     @OnOpen
-    public void onOpen(Session session, @PathParam("roomId") String roomId, @PathParam("playerId") String playerId) throws IOException {
+    public void onOpen(Session session, @PathParam("roomId") String roomId, @PathParam("playerId") String playerId) throws IOException, InterruptedException {
 //        logger.info("Connected in room: " + roomId);
 
-
+        logger.info("Zahtev od " + playerId + " sessionId " + session.getId() +
+                "\nVreme " + java.lang.System.currentTimeMillis());
 
             newSession(roomId,playerId,session);
-            if(allConnected(serverEndpointService.findRoom(roomId,rooms).getPlayers())){
-                GameThread.playersConnected = true;
-                System.out.println("Postavio ga");
+            while(!newSessionOver)
+            {
+                Thread.sleep(1000);
             }
+            newSessionOver = false;
+            if(allConnected(serverEndpointService.findRoom(roomId,rooms).getPlayers())){
+                Thread.sleep(500);
+                logger.info("SIBAJ DALJE!");
+                GameThread.playersConnected = true;
+            }
+
+//         session.getBasicRemote().sendText(playerId);
     }
-    //
+
 
     @OnMessage
     public void onMessage(Command command, Session session, @PathParam("roomId") String roomId, @PathParam("playerId") String playerId) {
@@ -111,20 +121,20 @@ public class GameEndpoint {
                     return false;
                 }
             }
-        logger.info("SIBAJ DALJE!");
         return true;
     }
 
-    public  void newSession(String roomId, String playerId,Session session) {
+    public void newSession(String roomId, String playerId,Session session) {
         Room room = serverEndpointService.findRoom(roomId,rooms);
         if(room == null)
             System.out.println("mrtvi room null");
         for (Iterator<Session> it = room.getPlayers().iterator(); it.hasNext(); ) {
             Session s = it.next();
 
-            System.out.println(s.getUserProperties().get("playerId") + " igrac");
+//            System.out.println(s.getUserProperties().get("playerId") + " igrac");
             if (s.getUserProperties().get("playerId").equals(playerId)){
-                System.out.println("Menjam session"+playerId);
+                System.out.println("----------------------------\n" +
+                        "Menjam session " + playerId + " username " + s.getUserProperties().get("username"));
                 String username=s.getUserProperties().get("username").toString();
 
                 session.getUserProperties().put("username",username);
@@ -134,6 +144,8 @@ public class GameEndpoint {
                 room.getPlayers().remove(s);
                 room.getPlayers().add(session);
 
+                System.out.println("Promenio session " + playerId);
+                newSessionOver = true;
                 return;
             }
         }

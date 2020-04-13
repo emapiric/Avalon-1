@@ -35,7 +35,8 @@ public class RoomEndpointServiceImpl implements RoomEndpointService {
             System.out.println("mrtvi room null");
         for (Iterator<Session> it = room.getPlayers().iterator(); it.hasNext(); ) {
             Session s = it.next();
-            System.out.println(s.getUserProperties().get("playerId") + " igrac");
+            System.out.println("!--------------------------\n"
+                    + s.getUserProperties().get("playerId") + " igrac");
             if (s.getUserProperties().get("playerId").equals(playerId)){
                 System.out.println("Stavljam username " + message);
                 session.getUserProperties().put("username",message);
@@ -45,6 +46,7 @@ public class RoomEndpointServiceImpl implements RoomEndpointService {
                 room.getPlayers().remove(s);
                 room.getPlayers().add(session);
 
+                System.out.println(String.format("Igrac %s ima username %s",playerId,message));
                 return;
             }
         }
@@ -61,12 +63,9 @@ public class RoomEndpointServiceImpl implements RoomEndpointService {
         for (Iterator<Session> it = room.getPlayers().iterator(); it.hasNext(); ) {
             Session s = it.next();
             if(!s.getUserProperties().get("username").equals("null")) {
-                try {
-                    System.out.println(s.getUserProperties().get("username") + " saljem " + message);
-                    s.getBasicRemote().sendText(message);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                //                    System.out.println(s.getUserProperties().get("username") + " saljem " + message);
+//                    s.getBasicRemote().sendText(message);
+                s.getAsyncRemote().sendText(message);
             }
         }
     }

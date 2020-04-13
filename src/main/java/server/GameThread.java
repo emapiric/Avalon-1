@@ -115,7 +115,7 @@ public class GameThread implements Runnable{
             s.getUserProperties().put("vote","null");
 
             try {
-                System.out.println(s.getUserProperties().get("username") + " saljem " + message);
+//                System.out.println(s.getUserProperties().get("username") + " saljem " + message);
                 s.getBasicRemote().sendObject(gson.toJson(command));
             } catch (IOException | EncodeException e) {
                 e.printStackTrace();

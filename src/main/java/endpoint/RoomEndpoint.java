@@ -27,7 +27,7 @@ public class RoomEndpoint {
 
     @OnOpen
     public void onOpen(Session session, @PathParam("roomId") String roomId, @PathParam("playerId") String playerId) throws IOException {
-        logger.info("Connected in room: " + roomId);
+//        logger.info("Connected in room: " + roomId);
 
 
         if(firstPlayer==false){
@@ -42,7 +42,6 @@ public class RoomEndpoint {
 
         room.addPlayer(session);
         session.getBasicRemote().sendText("You entered in a room");
-        System.out.println(room.getPlayers().size()+" je broj igraca");
         numberOfPlayers++;
     }
 
@@ -71,10 +70,10 @@ public class RoomEndpoint {
                 break;
 
             default:
-                logger.info("Player id:"+session.getUserProperties().get("playerId"));
-                logger.info("Room id:"+session.getUserProperties().get("roomId"));
+//                logger.info("Player id:"+session.getUserProperties().get("playerId"));
+//                logger.info("Room id:"+session.getUserProperties().get("roomId"));
 
-                System.out.println(session.getUserProperties().get("username"));
+//                System.out.println(session.getUserProperties().get("username"));
 
                 roomEndpointService.newSession(message, roomId,playerId,rooms,session);
 
@@ -82,11 +81,11 @@ public class RoomEndpoint {
 
 
                 roomEndpointService.sendToAll(playerInRoom,roomId,rooms);
-                System.out.println("Broj igraca je "+numberOfPlayers);
+//                System.out.println("Broj igraca je "+numberOfPlayers);
                 if(numberOfPlayers==5){
                     int numberOfPlayerinRoom2= serverEndpointService.findRoom(roomId,rooms).getPlayers().size();
                     serverEndpointService.findRoom(roomId,rooms).setNumberOfPlayers(numberOfPlayerinRoom2);
-                    System.out.println("Broj igraca je "+ serverEndpointService.findRoom(roomId,rooms).getNumberOfPlayers());
+//                    System.out.println("Broj igraca je "+ serverEndpointService.findRoom(roomId,rooms).getNumberOfPlayers());
                     roomEndpointService.startGame(roomId,rooms);
                 }
                 break;
