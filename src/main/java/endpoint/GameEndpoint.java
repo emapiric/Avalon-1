@@ -46,6 +46,7 @@ public class GameEndpoint {
                 System.out.println("Postavio ga");
             }
     }
+    //
 
     @OnMessage
     public void onMessage(Command command, Session session, @PathParam("roomId") String roomId, @PathParam("playerId") String playerId) {
