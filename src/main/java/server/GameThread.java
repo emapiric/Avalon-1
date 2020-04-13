@@ -95,15 +95,9 @@ public class GameThread implements Runnable{
                     }
                 }
 
-
-
-
             }
 
         }
-
-
-
 
     }
 

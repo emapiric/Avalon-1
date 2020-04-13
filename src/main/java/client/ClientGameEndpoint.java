@@ -65,7 +65,7 @@ public class ClientGameEndpoint {
 
             case "nominatedVote":
 
-                    showNominated(command.getNameVotes(),command.getVotes());
+//                    showNominated(command.getNameVotes(),command.getVotes());
 
 
                 break;

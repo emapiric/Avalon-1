@@ -11,11 +11,9 @@ public class Command {
     private int numberOfNegativeVotes;
 
    private Boolean[]votes;
-   private String nameVotes[];
 
-   public Command(String command,String[]nameVotes,Boolean [] votes){
+   public Command(String command,Boolean [] votes){
        this.command=command;
-       this.nameVotes=nameVotes;
        this.votes=votes;
    }
 
@@ -27,25 +25,20 @@ public class Command {
         this.votes = votes;
     }
 
-    public String[] getNameVotes() {
-        return nameVotes;
-    }
-
-    public void setNameVotes(String[] nameVotes) {
-        this.nameVotes = nameVotes;
-    }
-
     public int getNumberOfNegativeVotes() {
         return numberOfNegativeVotes;
     }
 
+    public Command(){
 
+    }
 
     public Command(String command, String value, String...nominated) {
         this.command = command;
         this.value = value;
         this.nominated = nominated;
     }
+
     public Command(String command, String value, String[] nominated, int numberOfNegativeVotes) {
         this.command = command;
         this.value = value;
@@ -57,6 +50,7 @@ public class Command {
         this.command = command;
         this.value = value;
     }
+
     public Command(String command, boolean accepted) {
         this.command = command;
         this.accepted = accepted;
@@ -69,8 +63,6 @@ public class Command {
     public void setAccepted(boolean accepted) {
         this.accepted = accepted;
     }
-
-
 
     public String getCommand() {
         return command;
@@ -102,6 +94,9 @@ public class Command {
                 "command='" + command + '\'' +
                 ", value='" + value + '\'' +
                 ", nominated=" + Arrays.toString(nominated) +
+                ", accepted=" + accepted +
+                ", numberOfNegativeVotes=" + numberOfNegativeVotes +
+                ", votes=" + Arrays.toString(votes) +
                 '}';
     }
 }
