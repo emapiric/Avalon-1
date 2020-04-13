@@ -33,7 +33,10 @@ public class ClientGameEndpoint {
             case "roll":
                 System.out.println("Your roll is " + command.getValue());
 
-                System.out.println(command.getNominated());
+                System.out.println("Your against ");
+                for (String s:command.getNominated()) {
+                    System.out.println(s);
+                }
 
                 break;
 
@@ -93,6 +96,8 @@ public class ClientGameEndpoint {
 
 
 
+
+
         }
 
     }
@@ -105,8 +110,9 @@ public class ClientGameEndpoint {
 
 
     public void nominatedPlayersToMission( int numberOfPlayers,Session session) {
-
+        System.out.println("Misija je"+missions);
         switch (missions) {
+
 
             case 1:
 
@@ -131,7 +137,6 @@ public class ClientGameEndpoint {
             case 5:
 
                 break;
-
 
         }
         missions++;

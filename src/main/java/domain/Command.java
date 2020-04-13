@@ -9,7 +9,7 @@ public class Command {
     private String[] nominated;
     private boolean accepted;
     private int numberOfNegativeVotes;
-   private String username;
+
    private Boolean[]votes;
    private String nameVotes[];
 

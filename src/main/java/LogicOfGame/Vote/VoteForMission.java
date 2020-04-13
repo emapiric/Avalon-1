@@ -2,13 +2,7 @@ package LogicOfGame.Vote;
 
 import domain.Command;
 import domain.Room;
-import service.ServerEndpointService;
-import service.impl.ServerEndpointServiceImpl;
 
-import javax.websocket.EncodeException;
-import javax.websocket.Session;
-import java.io.IOException;
-import java.util.Iterator;
 
 public class VoteForMission extends Vote {
     public VoteForMission( Room room, String... nominated) {

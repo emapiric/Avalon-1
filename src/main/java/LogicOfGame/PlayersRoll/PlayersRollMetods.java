@@ -31,7 +31,6 @@ public class PlayersRollMetods {
             Session s = it.next();
             sendToServerRolls(s,listOfCharacters);
 
-
         }
     }
 

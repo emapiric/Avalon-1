@@ -4,6 +4,7 @@ import domain.Player;
 import org.glassfish.tyrus.client.ClientManager;
 import org.glassfish.tyrus.websockets.WebSocket;
 
+import javax.swing.text.html.parser.Parser;
 import javax.websocket.Session;
 import java.awt.*;
 import java.net.URI;
@@ -32,7 +33,8 @@ public class Client {
         Session session=clientManager.connectToServer(ClientEndpoint.class,new URI(Server));
         System.out.println("Ukucajte vas nickname");
 
-        String userName=scanner.nextLine();
+       String userName=scanner.nextLine();
+       // String userName=String.valueOf(1);
         session.getBasicRemote().sendText(userName);
 
 

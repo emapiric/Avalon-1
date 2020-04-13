@@ -10,7 +10,7 @@ import server.GameThread;
 import service.GameEndpointService;
 import service.RoomEndpointService;
 import service.ServerEndpointService;
-import service.impl.GameEndpointServiceImpl;
+
 import service.impl.RoomEndpointServiceImpl;
 import service.impl.ServerEndpointServiceImpl;
 
@@ -42,17 +42,17 @@ public class GameEndpoint {
         logger.info("Zahtev od " + playerId + " sessionId " + session.getId() +
                 "\nVreme " + java.lang.System.currentTimeMillis());
 
-            newSession(roomId,playerId,session);
-            while(!newSessionOver)
-            {
-                Thread.sleep(1000);
-            }
-            newSessionOver = false;
-            if(allConnected(serverEndpointService.findRoom(roomId,rooms).getPlayers())){
-                Thread.sleep(500);
-                logger.info("SIBAJ DALJE!");
-                GameThread.playersConnected = true;
-            }
+        newSession(roomId,playerId,session);
+        while(!newSessionOver)
+        {
+            Thread.sleep(1000);
+        }
+        newSessionOver = false;
+        if(allConnected(serverEndpointService.findRoom(roomId,rooms).getPlayers())){
+            Thread.sleep(500);
+            logger.info("SIBAJ DALJE!");
+            GameThread.playersConnected = true;
+        }
 
 //         session.getBasicRemote().sendText(playerId);
     }
@@ -75,7 +75,7 @@ public class GameEndpoint {
 
                 break;
 
-            case "vote":
+            case "voteForMission":
 
                 serverEndpointService.findRoom(roomId,rooms).voteForMission.setVotes(command.isAccepted());
                 serverEndpointService.findRoom(roomId,rooms).voteForMission.setVoteNames(session.getUserProperties().get("username").toString());
@@ -84,7 +84,7 @@ public class GameEndpoint {
                 if(valueForVote==1){
                     serverEndpointService.findRoom(roomId,rooms).setOnMovePlayer(true);
                 }
-                    System.out.println(valueForVote);
+                System.out.println(valueForVote);
 
                 break;
 
@@ -93,18 +93,25 @@ public class GameEndpoint {
                 serverEndpointService.findRoom(roomId,rooms).voteInMission.setVotes(command.isAccepted());
                 serverEndpointService.findRoom(roomId,rooms).voteInMission.setVoteNames(session.getUserProperties().get("username").toString());
                 int valueForMission=serverEndpointService.findRoom(roomId,rooms).voteInMission.setVotesNumberAndOthers();
-                    if(valueForMission==0){
-                        if(serverEndpointService.findRoom(roomId,rooms).voteInMission.getQuest()>=3 && serverEndpointService.findRoom(roomId,rooms).voteInMission.getGood()==3){
-                            Command command1=new Command("gameOver","Good");
-                            break;
-                        }
-                        if(serverEndpointService.findRoom(roomId,rooms).voteInMission.getQuest()>=3 && serverEndpointService.findRoom(roomId,rooms).voteInMission.getEvil()==3){
-                            Command command1=new Command("gameOver","Evil");
-                            break;
-                        }
-                        serverEndpointService.findRoom(roomId,rooms).setOnMovePlayer(true);
-
+                if(valueForMission==0){
+                    if(serverEndpointService.findRoom(roomId,rooms).voteInMission.getQuest()>=3 && serverEndpointService.findRoom(roomId,rooms).voteInMission.getGood()==3){
+                        Command command1=new Command("gameOver","Good");
+                        serverEndpointService.findRoom(roomId,rooms).voteInMission.sendVotes(command1);
+                        break;
                     }
+                    if(serverEndpointService.findRoom(roomId,rooms).voteInMission.getQuest()>=3 && serverEndpointService.findRoom(roomId,rooms).voteInMission.getEvil()==3){
+                        Command command1=new Command("gameOver","Evil");
+                        serverEndpointService.findRoom(roomId,rooms).voteInMission.sendVotes(command1);
+                        break;
+                    }
+                    serverEndpointService.findRoom(roomId,rooms).setOnMovePlayer(true);
+
+                }
+                break;
+
+            case"guessMerlin":
+            //Ovo da se dovrsi
+
                 break;
         }
     }
@@ -117,10 +124,10 @@ public class GameEndpoint {
     public boolean allConnected(Set<Session> players){
         for (Iterator<Session> it = players.iterator(); it.hasNext(); ) {
             Session s = it.next();
-                if(s.getUserProperties().get("connected").equals("false")){
-                    return false;
-                }
+            if(s.getUserProperties().get("connected").equals("false")){
+                return false;
             }
+        }
         return true;
     }
 
@@ -171,3 +178,4 @@ public class GameEndpoint {
     }
 
 }
+
