@@ -17,8 +17,8 @@ public class Client {
 
 
 
-    public static void main(String[] args) throws Exception {
 
+    public static void main(String[] args) throws Exception {
 
 
         Client client=new Client();
@@ -38,7 +38,7 @@ public class Client {
 
 
         session.getUserProperties().put("end","null");
-      //  Thread.sleep(18000);
+
         while(true){
 
                 if(!session.getUserProperties().get("end").equals("null")){

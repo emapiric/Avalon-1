@@ -3,7 +3,6 @@ package server;
 import com.google.gson.Gson;
 import domain.Command;
 import domain.Room;
-import domain.Vote;
 import service.GameEndpointService;
 import service.impl.GameEndpointServiceImpl;
 
@@ -18,16 +17,13 @@ import java.util.Set;
 public class GameThread implements Runnable{
 
     private Room room;
-
     public GameThread(Room room) {
         this.room = room;
     }
     public GameEndpointService gameEndpointService=new GameEndpointServiceImpl();
     public HashMap<Integer,String> hashMap=new HashMap<>();
     public int currentMove=1;
-     public LinkedList<Boolean> votes=new LinkedList<>();
-     public LinkedList<String> nameVotes=new LinkedList<>();
-     public int voteNumber=0;
+
 
      public static boolean playersConnected = false;
 
@@ -44,47 +40,7 @@ public class GameThread implements Runnable{
 
         System.out.println("KRECEM DALJE");
 
-//        sendToAll2("Thread koristi novi session",room.getPlayers());
 
-
-//        Thread thread = new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    room.setOnMovePlayer(false);
-//                    System.out.println("Current move is " + currentMove);
-//                    while(true){
-//
-//                        try {
-//                            wait();
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//                        if(room.IsOnMovePlayer()==true){
-//                            System.out.println("EO ME");
-//                            if(currentMove==room.getPlayers().size()){
-//                                currentMove=1;
-//                            }
-//                            else{
-//
-//                                currentMove++;
-//                                System.out.println("Current move is now "+currentMove);
-//                                try {
-//                                    gameEndpointService.sendPlayersWhoIsOnMove(room,hashMap,currentMove);
-//                                } catch (IOException e) {
-//                                    e.printStackTrace();
-//                                } catch (EncodeException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//
-//                            room.setOnMovePlayer(false);
-//                        }
-//
-//                    }
-//                }
-//            });
-//        thread.start();
-//
        try {
             gameEndpointService.setPlayersRoll(room);
         } catch (IOException e) {
@@ -104,6 +60,43 @@ public class GameThread implements Runnable{
 
 
         while(true){
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            if(room.IsOnMovePlayer()==true){
+                System.out.println("Ukinuo sam se ");
+                currentMove++;
+                if(currentMove==room.getNumberOfPlayers()){
+                    currentMove=1;
+                    try {
+                        gameEndpointService.sendPlayersWhoIsOnMove(room,hashMap,currentMove);
+                        room.setOnMovePlayer(false);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (EncodeException e) {
+                        e.printStackTrace();
+                    }
+
+                }else{
+                    try {
+                        gameEndpointService.sendPlayersWhoIsOnMove(room,hashMap,currentMove);
+                        room.setOnMovePlayer(false);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (EncodeException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+
+
+            }
 
         }
 

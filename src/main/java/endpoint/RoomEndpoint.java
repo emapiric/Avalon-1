@@ -11,8 +11,7 @@ import service.impl.ServerEndpointServiceImpl;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashSet;
+
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -22,14 +21,14 @@ public class RoomEndpoint {
     private Logger logger = Logger.getLogger(this.getClass().getName());
     public RoomEndpointService roomEndpointService = new RoomEndpointServiceImpl();
     public ServerEndpointService serverEndpointService=new ServerEndpointServiceImpl();
-    static boolean firstPlayer;
+    static boolean firstPlayer=false;
     static int numberOfPlayers=0;
     public static Set<Room> rooms = ServerEndpoint.rooms;
 
     @OnOpen
     public void onOpen(Session session, @PathParam("roomId") String roomId, @PathParam("playerId") String playerId) throws IOException {
         logger.info("Connected in room: " + roomId);
-//        session.getBasicRemote().sendText("Connected in room: " + roomId);
+
 
         if(firstPlayer==false){
             rooms.add(new Room("1"));
@@ -87,6 +86,7 @@ public class RoomEndpoint {
                 if(numberOfPlayers==5){
                     int numberOfPlayerinRoom2= serverEndpointService.findRoom(roomId,rooms).getPlayers().size();
                     serverEndpointService.findRoom(roomId,rooms).setNumberOfPlayers(numberOfPlayerinRoom2);
+                    System.out.println("Broj igraca je "+ serverEndpointService.findRoom(roomId,rooms).getNumberOfPlayers());
                     roomEndpointService.startGame(roomId,rooms);
                 }
                 break;

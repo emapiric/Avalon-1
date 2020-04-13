@@ -28,7 +28,7 @@ public class OnMove {
         boolean checking=false;
         int key=0;
         do{
-            key=generateRandomNumber(room.getPlayers().size());
+            key=generateRandomNumber(room.getNumberOfPlayers());
             checking=doesKeyExist(hashMap,key);
 
         }while(checking==true);
@@ -53,9 +53,6 @@ public class OnMove {
            s.getBasicRemote().sendObject(command);
 
         }
-
-
-
 
     }
 

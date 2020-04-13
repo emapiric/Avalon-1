@@ -7,8 +7,8 @@ public class Command {
     private String command;
     private String value;
     private String[] nominated;
-   private boolean accepted;
-   // private Vote [] votes;
+    private boolean accepted;
+    private int numberOfNegativeVotes;
    private String username;
    private Boolean[]votes;
    private String nameVotes[];
@@ -35,13 +35,22 @@ public class Command {
         this.nameVotes = nameVotes;
     }
 
-    /*public Command(String command,Vote[] votes){
-            this.votes=votes;
-        }*/
+    public int getNumberOfNegativeVotes() {
+        return numberOfNegativeVotes;
+    }
+
+
+
     public Command(String command, String value, String...nominated) {
         this.command = command;
         this.value = value;
         this.nominated = nominated;
+    }
+    public Command(String command, String value, String[] nominated, int numberOfNegativeVotes) {
+        this.command = command;
+        this.value = value;
+        this.nominated = nominated;
+        this.numberOfNegativeVotes=numberOfNegativeVotes;
     }
 
     public Command(String command, String value) {
@@ -61,13 +70,7 @@ public class Command {
         this.accepted = accepted;
     }
 
-   /* public Vote[] getVotes() {
-        return votes;
-    }
 
-    public void setVotes(Vote[] votes) {
-        this.votes = votes;
-    }*/
 
     public String getCommand() {
         return command;

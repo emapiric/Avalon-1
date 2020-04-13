@@ -33,9 +33,7 @@ public class GameEndpoint {
     public GameEndpointService gameEndpointService = new GameEndpointServiceImpl();
     public ServerEndpointService serverEndpointService= new ServerEndpointServiceImpl();
     public static Set<Room> rooms = endpoint.ServerEndpoint.rooms;
-    //Ovo govno dolje je valjda za mutex ! mutex.lock i mutex.unlock
 
-    public static ReentrantLock mutex=new ReentrantLock();
     public int nesto=0;
 
     @OnOpen
@@ -57,21 +55,41 @@ public class GameEndpoint {
                 serverEndpointService.findRoom(roomId,rooms).setNominated(command.getNominated());
 
                 sendNominationToAllPlayers(command.getNominated(),roomId);
-
-               // serverEndpointService.findRoom(roomId,rooms).setOnMovePlayer(true);
-
-
+                serverEndpointService.findRoom(roomId,rooms).voteInMission.setPlayerInMission(command.getNominated().length);
+              //  serverEndpointService.findRoom(roomId,rooms).setOnMovePlayer(true);
 
                 break;
 
             case "vote":
-                serverEndpointService.findRoom(roomId,rooms).setNameVote(session.getUserProperties().get("username").toString());
-                serverEndpointService.findRoom(roomId,rooms).setVote(command.isAccepted());
 
+                serverEndpointService.findRoom(roomId,rooms).voteForMission.setVotes(command.isAccepted());
+                serverEndpointService.findRoom(roomId,rooms).voteForMission.setVoteNames(session.getUserProperties().get("username").toString());
+                int valueForVote=serverEndpointService.findRoom(roomId,rooms).voteForMission.setVotesNumberAndOthers();
 
-              //session.getUserProperties().put("vote",command.isAccepted());
+                if(valueForVote==1){
+                    serverEndpointService.findRoom(roomId,rooms).setOnMovePlayer(true);
+                }
+                    System.out.println(valueForVote);
 
+                break;
 
+            case "voteInMission":
+
+                serverEndpointService.findRoom(roomId,rooms).voteInMission.setVotes(command.isAccepted());
+                serverEndpointService.findRoom(roomId,rooms).voteInMission.setVoteNames(session.getUserProperties().get("username").toString());
+                int valueForMission=serverEndpointService.findRoom(roomId,rooms).voteInMission.setVotesNumberAndOthers();
+                    if(valueForMission==0){
+                        if(serverEndpointService.findRoom(roomId,rooms).voteInMission.getQuest()>=3 && serverEndpointService.findRoom(roomId,rooms).voteInMission.getGood()==3){
+                            Command command1=new Command("gameOver","Good");
+                            break;
+                        }
+                        if(serverEndpointService.findRoom(roomId,rooms).voteInMission.getQuest()>=3 && serverEndpointService.findRoom(roomId,rooms).voteInMission.getEvil()==3){
+                            Command command1=new Command("gameOver","Evil");
+                            break;
+                        }
+                        serverEndpointService.findRoom(roomId,rooms).setOnMovePlayer(true);
+
+                    }
                 break;
         }
     }

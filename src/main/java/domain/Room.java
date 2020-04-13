@@ -1,6 +1,7 @@
 package domain;
 
-
+import LogicOfGame.Vote.VoteForMission;
+import LogicOfGame.Vote.VoteInMission;
 
 import javax.websocket.EncodeException;
 import javax.websocket.Session;
@@ -22,44 +23,20 @@ public class Room{
     private LinkedList<Boolean> votes=new LinkedList<Boolean>();
     private String[]nominated;
 
+    //Predstavlja nominovane igrace!
+
+    public VoteForMission voteForMission=new VoteForMission(this,nominated);
+    public VoteInMission voteInMission=new VoteInMission(this,nominated);
+
     public void setNominated(String...nominated){
         this.nominated=nominated;
     }
-    public int getVoteNumber() {
-        return voteNumber;
+
+    public Room(String roomId) {
+        this.active = false;
+        this.roomId = roomId;
+        this.players = Collections.synchronizedSet(new HashSet<Session>());
     }
-
-    public void setVoteNumber() {
-        if(voteNumber==numberOfPlayers){
-            System.out.println("Vote iss "+voteNumber);
-            Boolean []votes1=new Boolean[votes.size()];
-            votes.toArray(votes1);
-            String[] nameVotes1=new String[voteNames.size()];
-            voteNames.toArray(nameVotes1);
-
-            Command command=new Command("nominatedVote",nameVotes1,votes1);
-
-            sendVotes(command);
-            votes.remove();
-            voteNames.remove();
-            this.voteNumber=1;
-        }
-        else{
-            System.out.println("Vote is "+voteNumber);
-            this.voteNumber++;
-        }
-
-    }
-
-    public void setVote(boolean vote){
-        votes.addFirst(vote);
-        setVoteNumber();
-    }
-    public void setNameVote(String name){
-        voteNames.addFirst(name);
-
-    }
-
 
 
     public boolean isActive() {
@@ -69,13 +46,6 @@ public class Room{
     public void setActive(boolean active) {
         this.active = active;
     }
-
-    public Room(String roomId) {
-        this.active = false;
-        this.roomId = roomId;
-        this.players = Collections.synchronizedSet(new HashSet<Session>());
-    }
-
     public boolean IsOnMovePlayer() {
         return onMovePlayer;
     }
@@ -137,7 +107,6 @@ public class Room{
 
     }
 
-
     @Override
     public String toString() {
         return "Room{" +
@@ -145,5 +114,4 @@ public class Room{
                 ", players=" + players +
                 '}';
     }
-
 }

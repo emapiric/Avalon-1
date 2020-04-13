@@ -43,7 +43,6 @@ public class GameEndpointServiceImpl implements GameEndpointService {
 
         PlayersRollMetods playersRollMetods=new PlayersRollMetods();
         playersRollMetods.setPlayersRoll(room);
-//
 
     }
 

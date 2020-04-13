@@ -2,14 +2,10 @@ package client;
 
 import com.google.gson.Gson;
 import domain.Command;
-import domain.Vote;
 import domain.decoder.CommandDecoder;
-import domain.decoder.PlayerDecoder;
 import domain.encoder.CommandEncoder;
-import domain.encoder.PlayerEncoder;
 
 import javax.websocket.*;
-import javax.websocket.ClientEndpoint;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.logging.Logger;
@@ -30,7 +26,7 @@ public class ClientGameEndpoint {
 
     @OnMessage
     public void onMessage(Command command, Session session) throws IOException {
-        System.out.println(command);
+
         switch (command.getCommand()) {
             case "roll":
                 System.out.println("Your roll is " + command.getValue());
@@ -49,28 +45,15 @@ public class ClientGameEndpoint {
                 break;
 
             case "nominated":
-                Command command1=null;
+
                 String []nominated=command.getNominated();
                     System.out.println("Nominovani su : ");
                 for (String s:nominated) {
                     System.out.println(s);
 
                 }
-
                 System.out.println("Zelite li da nominovani podju na misiju? Ako zelite, napisite 1 a 0 u suprotnom");
-
-                int odgovor=Integer.parseInt(scanner.nextLine());
-                if(odgovor==1){
-                   command1=new Command("vote",true);
-                }
-                else{
-                    command1=new Command("vote",false);
-                }
-                try {
-                    session.getBasicRemote().sendObject(command1);
-                } catch (EncodeException e) {
-                    e.printStackTrace();
-                }
+              vote(session,"vote");
 
 
                 break;
@@ -81,6 +64,31 @@ public class ClientGameEndpoint {
 
 
                 break;
+
+            case "missionStarted":
+
+                if(areYouNominated(command.getNominated(),session)){
+
+                    System.out.println("Zelite li da misija prodje ili padne? Ako zelite, napisite 1 a 0 u suprotnom");
+                        vote(session,"voteInMission");
+
+                }
+
+
+                break;
+
+
+            case "missionFinished":
+
+                System.out.println("Mission has"+command.getValue()+"\nNumber of negative votes are "+command.getNumberOfNegativeVotes());
+
+                break;
+
+            case "gameOver":
+                    System.out.println("Victory go to "+command.getValue());
+
+                    break;
+
 
 
         }
@@ -207,6 +215,33 @@ public class ClientGameEndpoint {
             System.out.println("Player "+nameVotes[i]+" voted "+votes[i]);
         }
 
+    }
+    public boolean areYouNominated(String[] nameVotes,Session  session){
+
+        for (int i = 0; i <nameVotes.length ; i++) {
+            if(nameVotes.equals(session.getUserProperties().get("username")))
+                return true;
+        }
+            return false;
+    }
+
+    public void vote(Session session,String value){
+
+        Command command1=null;
+
+
+        int odgovor=Integer.parseInt(scanner.nextLine());
+        if(odgovor==1) {
+            command1 = new Command(value, true);
+        }
+        else{
+            command1=new Command(value,false);
+        }
+        try {
+            session.getBasicRemote().sendObject(command1);
+        } catch (EncodeException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
